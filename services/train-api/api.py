@@ -1,6 +1,6 @@
 import os
 from flask import *
-from sunshink_cv.cfg import TASK_FILE, TASK_HISTORY, TRAIN_LOG, trainLogDir
+from cv.cfg import TASK_FILE, TASK_HISTORY, TRAIN_LOG, trainLogDir
 
 from .constellation import (
     DatasetIngressFacade,
@@ -170,7 +170,7 @@ def global_event_stream():
     """
     查询全局事件总线日志
     """
-    from sunshink_cv.cfg import EVENT_STREAM
+    from cv.cfg import EVENT_STREAM
 
     if not os.path.exists(EVENT_STREAM):
         return jsonify({"error": "Event stream not found"}), 404

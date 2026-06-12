@@ -2,9 +2,10 @@
 
 | Old | New |
 |-----|-----|
-| `ssdet VLM/cv/` | `packages/cv/sunshink_cv/` |
-| `python -m cv.train` | `ssm train cv` |
-| `vlm/scripts/start_vlm.sh` | `services/vlm-server/scripts/start.sh` |
-| `camera/service/ssg_a_camera_server.py` | `services/video/server.py` |
-| `web/ui/` | `apps/web/` |
-| `ets/scripts/train.py` | `ssm train ets` |
+| `packages/cv/sunshink_cv/` | `cv/` |
+| `packages/ets/ets/` | `ets/` |
+| `packages/vlm/sunshink_vlm/` | `vlm/` |
+| `packages/common/ssm_common/` | `ssm_common/` |
+| `python -m sunshink_cv.train` | `python -m cv.train` |
+| `cv/configs/self.yaml` | `artifacts/cv/runtime/self.yaml`（由 `configs/cv/default.yaml` 生成） |
+| `packages/ets/scripts/train.py` | `ets/scripts/train.py` |

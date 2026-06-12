@@ -24,7 +24,7 @@ UI_ROOT = os.path.join(REPO_ROOT, "apps", "web")
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from sunshink_vlm.prompts import (
+from vlm.prompts import (
     _assistant_content_message,
     _delta_content_piece,
     _image_data_url_from_jpeg_bytes,

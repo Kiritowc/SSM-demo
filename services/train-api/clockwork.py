@@ -9,9 +9,9 @@ import time
 from datetime import datetime
 from typing import List
 
-from sunshink_cv.cfg import *
-from sunshink_cv.core.events import EventBus, JsonlEventSink
-from sunshink_cv.core.tasking import TaskArchiveRepository, TaskConfigMaterializer, TaskProjectionResolver
+from cv.cfg import *
+from cv.core.events import EventBus, JsonlEventSink
+from cv.core.tasking import TaskArchiveRepository, TaskConfigMaterializer, TaskProjectionResolver
 
 
 class TaskConfigProjection:
@@ -59,7 +59,7 @@ class TrainingSubprocessCapsule:
         self.events.emit("task", "launch", {"model_name": model_name, "configfile": configfile, "runs_dir": runs_dir})
 
         popen_kwargs = {
-            "args": ["python", "-m", "sunshink_cv.train", "--configfile", configfile],
+            "args": ["python", "-m", "cv.train", "--configfile", configfile],
             "stdout": None,
             "stderr": None,
         }

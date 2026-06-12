@@ -10,11 +10,11 @@ from typing import Dict, List, Tuple
 import cv2
 import matplotlib.pyplot as plt
 
-from sunshink_cv.cfg import *
-from sunshink_cv.core.tasking import TaskArchiveRepository, TaskTopologyCompiler
-from sunshink_cv.export import convert_and_save_model
-from sunshink_cv.inference import ssDet
-from sunshink_cv.utils.tool import get_history_epoch
+from cv.cfg import *
+from cv.core.tasking import TaskArchiveRepository, TaskTopologyCompiler
+from cv.export import convert_and_save_model
+from cv.inference import ssDet
+from cv.utils.tool import get_history_epoch
 
 
 @dataclass(frozen=True)

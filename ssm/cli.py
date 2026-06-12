@@ -47,18 +47,18 @@ def cmd_demo(_: argparse.Namespace) -> int:
 
 def cmd_train_cv(args: argparse.Namespace) -> int:
     root = _root()
-    cmd = [sys.executable, "-m", "sunshink_cv.train"]
+    cmd = [sys.executable, "-m", "cv.train"]
     if args.configfile:
         cmd += ["--configfile", args.configfile]
     rc = _run(cmd)
     if rc == 0 and args.deploy:
-        return _run([sys.executable, "-m", "sunshink_cv.post_deploy", "--restart-camera"])
+        return _run([sys.executable, "-m", "cv.post_deploy", "--restart-camera"])
     return rc
 
 
 def cmd_train_ets(args: argparse.Namespace) -> int:
     root = _root()
-    script = root / "packages/ets/scripts/train.py"
+    script = root / "ets/scripts/train.py"
     cmd = [sys.executable, str(script), "--config", str(root / "configs/ets/default.yaml")]
     if args.model:
         cmd += ["--model", args.model]
