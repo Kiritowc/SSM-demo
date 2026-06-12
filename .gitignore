@@ -1,0 +1,38 @@
+# Artifacts
+artifacts/
+*.gguf
+*.engine
+*.onnx
+*.bin
+*.pt
+*.pth
+
+# Data images
+data/**/images/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Logs & outputs
+*.log
+runs/
+outputs/
+exports/
+
+# IDE
+.idea/
+.vscode/
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local env
+.env

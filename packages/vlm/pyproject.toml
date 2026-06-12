@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sunshink-vlm"
+version = "0.1.0"
+description = "SSM Qwen VLM client"
+requires-python = ">=3.8"
+dependencies = ["ssm-common", "requests", "pillow", "opencv-python", "numpy"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sunshink_vlm*"]

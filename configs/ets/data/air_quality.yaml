@@ -1,0 +1,21 @@
+data:
+  profile: air_quality
+  path: data/ets/air_quality.csv
+  datetime_col: Date
+  feature_cols:
+    - CO
+    - NO2
+    - SO2
+    - O3
+    - PM2.5
+    - PM10
+  target_col: Pollution_Index
+  window_size: 24
+  horizon: 1
+  train_ratio: 0.7
+  val_ratio: 0.15
+  fill_method: ffill
+  classify:
+    enabled: false
+    num_classes: 3
+    thresholds: [400, 700]

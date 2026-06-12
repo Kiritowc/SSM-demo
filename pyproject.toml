@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ssm"
+version = "0.1.0"
+description = "Sunshink ML platform: CV + ETS + VLM"
+requires-python = ">=3.8"
+dependencies = ["ssm-common", "sunshink-cv", "sunshink-vlm", "ets", "pyyaml>=6.0"]
+
+[project.scripts]
+ssm = "ssm.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ssm*"]
+
+[tool.uv.workspace]
+members = ["packages/common", "packages/cv", "packages/ets", "packages/vlm"]

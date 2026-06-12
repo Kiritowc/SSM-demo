@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ssm-common"
+version = "0.1.0"
+description = "SSM platform shared configuration and paths"
+requires-python = ">=3.8"
+dependencies = ["pyyaml>=6.0"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ssm_common*"]

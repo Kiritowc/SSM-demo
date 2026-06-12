@@ -1,0 +1,27 @@
+allow_train_time_list:
+  - ["19:00:00", "23:59:59"]
+  - ["00:00:00", "08:00:00"]
+model_name: ssg_a
+obj_labels: [robot_toy]
+runs_dir: artifacts/cv/runs
+save_dir: artifacts/cv/runs/robot_toy
+zerostart: false
+pretrained_weight: artifacts/cv/runs/robot_toy/best.bin
+dataset:
+  train: data/cv/robot_toy/train.txt
+  val: data/cv/robot_toy/val.txt
+  names: data/cv/robot_toy/classes.txt
+model:
+  nc: 1
+  input_width: 416
+  input_height: 416
+train:
+  lr: 0.001
+  thresh: 0.25
+  warmup: true
+  batch_size: 16
+  end_epoch: 200
+  milestones: [140, 170, 190]
+deploy:
+  engine: artifacts/cv/engines/robot_far.engine
+  marker: artifacts/cv/engines/.robot_toy_ready

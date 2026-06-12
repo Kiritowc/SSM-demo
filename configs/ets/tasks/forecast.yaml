@@ -1,0 +1,7 @@
+task:
+  type: forecast
+
+data:
+  classify:
+    enabled: false
+

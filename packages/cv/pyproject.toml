@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sunshink-cv"
+version = "0.1.0"
+description = "SSM object detection framework"
+requires-python = ">=3.8"
+dependencies = [
+  "ssm-common",
+  "torch>=2.0",
+  "torchvision",
+  "tqdm",
+  "pyyaml>=6.0",
+  "cryptography",
+  "matplotlib",
+  "pillow",
+  "pycocotools",
+  "onnx>=1.15",
+  "onnxsim",
+  "onnxruntime>=1.16",
+  "opencv-python",
+  "albumentations",
+  "numpy",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sunshink_cv*"]

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ssdet</title>
+    <link rel="stylesheet" href="/ui/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <aside class="app-sidebar" aria-label="侧边导航">
+        <div class="sidebar-top">
+          <button
+            id="sidebar-toggle"
+            class="icon-button"
+            type="button"
+            aria-label="收起菜单"
+            data-tooltip="收起菜单"
+          >☰</button>
+          <button class="icon-button" type="button" aria-label="搜索" data-tooltip="搜索">⌕</button>
+        </div>
+
+        <nav class="sidebar-nav">
+          <button id="new-chat-btn" class="nav-item active" type="button">
+            <span class="nav-icon">✎</span>
+            <span>发起新对话</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-group">
+          <div class="group-title">模型</div>
+          <button id="cv-model-button" class="nav-item compact" type="button" aria-haspopup="menu" aria-expanded="false">
+            <span id="cv-model-label">默认</span>
+            <span class="chevron">›</span>
+          </button>
+        </div>
+
+        <div class="sidebar-group history-group">
+          <div class="group-title">对话</div>
+          <div id="history-list" class="history-list"></div>
+          <div id="history-empty" class="history-empty">暂无对话</div>
+        </div>
+
+        <button class="sidebar-footer" type="button" data-tooltip="设置和帮助">
+          <span class="nav-icon">⚙</span>
+          <span class="sidebar-footer-label">设置和帮助</span>
+        </button>
+      </aside>
+
+      <div id="history-menu" class="history-menu" hidden>
+        <button type="button" data-action="rename">
+          <span class="menu-icon">✎</span><span>重命名</span>
+        </button>
+        <button type="button" data-action="delete">
+          <span class="menu-icon">🗑</span><span>删除</span>
+        </button>
+      </div>
+
+      <div id="cv-model-menu" class="model-menu" hidden>
+        <button type="button" data-cv-model="none">
+          <span>默认</span><span class="check-mark">✓</span>
+        </button>
+        <button type="button" data-cv-model="ssg_a_robot_toy">
+          <span>robot_toy</span><span class="check-mark">✓</span>
+        </button>
+      </div>
+
+      <section class="chat-panel">
+        <span id="ask-status" hidden></span>
+
+        <div id="conversation" class="conversation" aria-live="polite">
+          <div id="conversation-empty" class="conversation-empty">
+            <div class="hello">你好</div>
+            <div class="hello-sub">需要我为你分析当前画面里的什么？</div>
+          </div>
+        </div>
+
+        <form id="ask-form" class="composer-wrap">
+          <div class="composer">
+            <textarea
+              id="question"
+              name="question"
+              rows="1"
+              placeholder="问问 sunshink"
+              required
+            ></textarea>
+            <button id="ask-button" type="submit" aria-label="发送" data-mode="send">
+              <span class="send-icon" aria-hidden="true">➤</span>
+              <span class="stop-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="camera-card">
+        <div class="card-header">
+          <div>
+            <h2>ssdet</h2>
+          </div>
+          <div class="status-pill" id="camera-status">连接中</div>
+        </div>
+        <div class="stream-frame">
+          <img id="camera-stream" src="/stream" alt="ssdet camera stream" />
+          <canvas id="camera-overlay" class="camera-overlay" aria-hidden="true"></canvas>
+        </div>
+        <dl class="stats-grid" id="stats">
+          <div><dt>耗时</dt><dd id="stat-infer-ms">-</dd></div>
+          <div><dt>FPS</dt><dd id="stat-fps">-</dd></div>
+        </dl>
+      </section>
+    </main>
+
+    <script src="/ui/app.js"></script>
+  </body>
+</html>

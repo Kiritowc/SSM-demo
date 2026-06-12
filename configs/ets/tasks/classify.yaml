@@ -1,0 +1,13 @@
+task:
+  type: classify
+
+data:
+  classify:
+    enabled: true
+    num_classes: 3
+    thresholds: [400, 700]
+
+train:
+  early_stopping:
+    monitor: val_accuracy
+    mode: max

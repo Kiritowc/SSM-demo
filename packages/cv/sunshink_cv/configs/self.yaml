@@ -1,0 +1,18 @@
+DATASET:
+  TRAIN: dataset/robot_toy_aug_far_merged/train.txt
+  VAL: dataset/robot_toy_aug_far_merged/val.txt
+  NAMES: dataset/robot_toy/labels/classes.txt
+MODEL:
+  NC: 1
+  INPUT_WIDTH: 416
+  INPUT_HEIGHT: 416
+TRAIN:
+  LR: 0.001
+  THRESH: 0.25
+  WARMUP: true
+  BATCH_SIZE: 16
+  END_EPOCH: 200
+  MILESTIONES:
+  - 140
+  - 170
+  - 190
