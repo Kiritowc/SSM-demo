@@ -1,25 +1,33 @@
 import torch
 import torch.nn as nn
-from pathlib import Path
 
 from .layers import *
+from cv.cfg import ensure_cv_runtime
 from cv.utils.tool import *
 from .manifold import DetectorSemanticForge
 
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-datasetCfg = LoadYaml(str(_REPO_ROOT / "artifacts/cv/runtime/self.yaml"))
-input_shape = [datasetCfg.input_height, datasetCfg.input_width]
+_DATASET_CFG_CACHE = None
 
+
+def _dataset_cfg():
+    global _DATASET_CFG_CACHE
+    if _DATASET_CFG_CACHE is None:
+        from cv.cfg import RUNTIME_YAML
+
+        ensure_cv_runtime()
+        _DATASET_CFG_CACHE = LoadYaml(RUNTIME_YAML)
+    return _DATASET_CFG_CACHE
 
 
 class Detector(nn.Module):
     def __init__(self, category_num, opt, load_param):
         super(Detector, self).__init__()
+        cfg = _dataset_cfg()
         forge = DetectorSemanticForge()
         self.backbone, self.backbone_manifest, ins, ous = forge.forge(
             model_name=opt.model,
-            input_width=datasetCfg.input_width,
-            input_height=datasetCfg.input_height,
+            input_width=cfg.input_width,
+            input_height=cfg.input_height,
             override_ins=opt.ins,
             override_ous=opt.ous,
         )

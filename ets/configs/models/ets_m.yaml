@@ -1,0 +1,18 @@
+model:
+  name: ets_m
+  individual: true
+  num_channels:
+  - 16
+  - 16
+  kernel_size: 3
+  dropout: 0.1
+  decomp_kernel: 9
+  use_weight_norm: false
+train:
+  epochs: 100
+  batch_size: 32
+  lr: 0.001
+  early_stopping:
+    enabled: false
+  visualization:
+    enabled: false

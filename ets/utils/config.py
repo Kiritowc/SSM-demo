@@ -8,23 +8,27 @@ from typing import Any
 
 import yaml
 
-DEFAULT_CONFIG_RELATIVE = Path("configs/default.yaml")
-MODELS_CONFIG_DIR = Path("configs/models")
-TASKS_CONFIG_DIR = Path("configs/tasks")
-DATA_CONFIG_DIR = Path("configs/data")
-
-
 def get_project_root(start: Path | None = None) -> Path:
-    """Resolve project root from a script path or current working directory."""
+    """Resolve monorepo root (SSM_ROOT)."""
     if start is not None:
         return start.resolve().parent if start.name.endswith(".py") else start.resolve()
-    return Path.cwd()
+    from ssm.paths import repo_root
+
+    return repo_root()
+
+
+def _configs_root(project_root: Path | None = None) -> Path:
+    root = project_root or get_project_root()
+    from ssm.paths import get_paths
+
+    if root == get_paths().root:
+        return get_paths().configs_ets
+    return root / "ets" / "configs"
 
 
 def get_default_config_path(project_root: Path | None = None) -> Path:
     """Return path to the default YAML config."""
-    root = project_root or Path.cwd()
-    return root / DEFAULT_CONFIG_RELATIVE
+    return _configs_root(project_root) / "default.yaml"
 
 
 def resolve_config_paths(
@@ -51,8 +55,7 @@ def resolve_config_paths(
 
 def list_model_configs(project_root: Path | None = None) -> list[str]:
     """List available model config names under configs/models/."""
-    root = project_root or Path.cwd()
-    models_dir = root / MODELS_CONFIG_DIR
+    models_dir = _configs_root(project_root) / "models"
     if not models_dir.exists():
         return []
     return sorted(path.stem for path in models_dir.glob("*.yaml"))
@@ -60,8 +63,7 @@ def list_model_configs(project_root: Path | None = None) -> list[str]:
 
 def list_task_configs(project_root: Path | None = None) -> list[str]:
     """List available task config names under configs/tasks/."""
-    root = project_root or Path.cwd()
-    tasks_dir = root / TASKS_CONFIG_DIR
+    tasks_dir = _configs_root(project_root) / "tasks"
     if not tasks_dir.exists():
         return []
     return sorted(path.stem for path in tasks_dir.glob("*.yaml"))
@@ -69,8 +71,7 @@ def list_task_configs(project_root: Path | None = None) -> list[str]:
 
 def list_data_configs(project_root: Path | None = None) -> list[str]:
     """List available data config profiles under configs/data/."""
-    root = project_root or Path.cwd()
-    data_dir = root / DATA_CONFIG_DIR
+    data_dir = _configs_root(project_root) / "data"
     if not data_dir.exists():
         return []
     return sorted(path.stem for path in data_dir.glob("*.yaml"))
@@ -113,13 +114,13 @@ def _infer_data_profile(cfg: dict[str, Any], project_root: Path) -> str | None:
         return None
 
     stem = Path(data_path).stem.lower()
-    candidate = project_root / DATA_CONFIG_DIR / f"{stem}.yaml"
+    candidate = _configs_root(project_root) / "data" / f"{stem}.yaml"
     if candidate.exists():
         return stem
 
     for name in list_data_configs(project_root):
         if name in stem or stem in name:
-            profile_path = project_root / DATA_CONFIG_DIR / f"{name}.yaml"
+            profile_path = _configs_root(project_root) / "data" / f"{name}.yaml"
             if profile_path.exists():
                 return name
     return None
@@ -134,12 +135,12 @@ def _resolve_fragment_paths(
     paths: list[Path] = []
 
     if model_name:
-        model_path = project_root / MODELS_CONFIG_DIR / f"{model_name}.yaml"
+        model_path = _configs_root(project_root) / "models" / f"{model_name}.yaml"
         if model_path.exists():
             paths.append(model_path)
 
     if task_type:
-        task_path = project_root / TASKS_CONFIG_DIR / f"{task_type}.yaml"
+        task_path = _configs_root(project_root) / "tasks" / f"{task_type}.yaml"
         if task_path.exists():
             paths.append(task_path)
 
@@ -153,7 +154,7 @@ def _resolve_data_fragment_path(
     """Resolve auto-loaded data config fragment."""
     if not data_profile:
         return None
-    data_path = project_root / DATA_CONFIG_DIR / f"{data_profile}.yaml"
+    data_path = _configs_root(project_root) / "data" / f"{data_profile}.yaml"
     if data_path.exists():
         return data_path
     return None
@@ -239,7 +240,7 @@ def load_config(
     model_name, task_type, data_profile = _effective_selectors(merged, overrides)
 
     if model_name:
-        model_path = root / MODELS_CONFIG_DIR / f"{model_name}.yaml"
+        model_path = _configs_root(root) / "models" / f"{model_name}.yaml"
         if model_path.exists():
             merged = _deep_merge(merged, load_yaml(model_path))
 
@@ -250,7 +251,7 @@ def load_config(
         merged = _deep_merge(merged, load_yaml(data_fragment))
 
     if task_type:
-        task_path = root / TASKS_CONFIG_DIR / f"{task_type}.yaml"
+        task_path = _configs_root(root) / "tasks" / f"{task_type}.yaml"
         if task_path.exists():
             merged = _deep_merge(merged, load_yaml(task_path))
 
@@ -282,7 +283,7 @@ def validate_config(cfg: dict[str, Any], project_root: Path | None = None) -> No
         raise ValueError("model.name is required.")
 
     available_models = list_model_configs(root)
-    model_path = root / MODELS_CONFIG_DIR / f"{model_name}.yaml"
+    model_path = _configs_root(root) / "models" / f"{model_name}.yaml"
     if available_models and not model_path.exists():
         available = ", ".join(available_models)
         raise ValueError(

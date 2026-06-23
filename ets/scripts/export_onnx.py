@@ -3,11 +3,18 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+_REPO = Path(__file__).resolve().parents[2]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+os.environ.setdefault("SSM_ROOT", str(_REPO))
+
+from ssm.bootstrap import bootstrap_repo
+
+REPO_ROOT = bootstrap_repo(_REPO)
 
 from ets.export.onnx import export_onnx
 from ets.utils.checkpoint import resolve_checkpoint
@@ -24,10 +31,10 @@ def main() -> None:
         )
     ckpt_path = Path(args.checkpoint)
     if not ckpt_path.is_absolute():
-        ckpt_path = PROJECT_ROOT / ckpt_path
+        ckpt_path = REPO_ROOT / ckpt_path
     checkpoint = str(resolve_checkpoint(ckpt_path, prefer="best"))
 
-    output_path = PROJECT_ROOT / args.output
+    output_path = REPO_ROOT / args.output
 
     export_onnx(
         checkpoint_path=checkpoint,
@@ -42,11 +49,11 @@ def main() -> None:
 def parse_args():
     import argparse
 
-    parser = argparse.ArgumentParser(description="ETS ONNX 导出")
-    parser.add_argument("--checkpoint", default="", help="run 目录或 weights/best.pt，训练后填写")
-    parser.add_argument("--output", default="exports/model.onnx", help="ONNX 模型输出路径")
-    parser.add_argument("--opset-version", default=17, type=int, help="ONNX opset 版本")
-    parser.add_argument("--device", default="cpu", help="导出时使用的设备")
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--checkpoint", default="")
+    parser.add_argument("--output", default="exports/model.onnx")
+    parser.add_argument("--opset-version", default=17, type=int)
+    parser.add_argument("--device", default="cpu")
     return parser.parse_args()
 
 

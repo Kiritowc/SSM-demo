@@ -1,7 +1,0 @@
-model:
-  name: dlinear
-  individual: false
-  decomp_kernel: 25
-
-data:
-  input_mode: ms

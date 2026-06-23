@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import random
 from dataclasses import dataclass
@@ -9,13 +11,26 @@ import numpy as np
 import torch
 from PIL import Image
 
+from cv.cfg import ensure_cv_runtime
 from cv.core.registry import NamedComponentRegistry
 from .tool import LoadYaml
 
+_DATASET_CFG_CACHE = None
 
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-datasetCfg = LoadYaml(str(_REPO_ROOT / "artifacts/cv/runtime/self.yaml"))
-input_shape = [datasetCfg.input_height, datasetCfg.input_width]
+
+def _dataset_cfg():
+    global _DATASET_CFG_CACHE
+    if _DATASET_CFG_CACHE is None:
+        from cv.cfg import RUNTIME_YAML
+
+        ensure_cv_runtime()
+        _DATASET_CFG_CACHE = LoadYaml(RUNTIME_YAML)
+    return _DATASET_CFG_CACHE
+
+
+def _input_shape() -> list[int]:
+    cfg = _dataset_cfg()
+    return [cfg.input_height, cfg.input_width]
 
 augmentation_registry = NamedComponentRegistry("augmentation")
 
@@ -60,7 +75,7 @@ def baseRandomAug(image, boxes, jitter=0.3, hue=0.1, sat=0.7, val=0.4, random=Tr
         img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(img_rgb)
     iw, ih = image.size
-    h, w = input_shape
+    h, w = _input_shape()
     output = []
     for box in boxes:
         _, category = box[0], box[1]
@@ -139,8 +154,9 @@ def baseRandomAug(image, boxes, jitter=0.3, hue=0.1, sat=0.7, val=0.4, random=Tr
     nL = len(box)
     labels_out = np.zeros((nL, 6))
     if nL:
-        box[:, [0, 2]] = box[:, [0, 2]] / input_shape[1]
-        box[:, [1, 3]] = box[:, [1, 3]] / input_shape[0]
+        shape = _input_shape()
+        box[:, [0, 2]] = box[:, [0, 2]] / shape[1]
+        box[:, [1, 3]] = box[:, [1, 3]] / shape[0]
         box[:, 2:4] = box[:, 2:4] - box[:, 0:2]
         box[:, 0:2] = box[:, 0:2] + box[:, 2:4] / 2
         labels_out[:, 1] = box[:, -1]

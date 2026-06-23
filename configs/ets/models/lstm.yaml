@@ -1,9 +1,0 @@
-model:
-  name: lstm
-  hidden_size: 128
-  num_layers: 2
-  dropout: 0.1
-  bidirectional: false
-
-data:
-  input_mode: ms

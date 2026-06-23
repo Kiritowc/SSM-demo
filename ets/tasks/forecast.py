@@ -14,6 +14,7 @@ from ets.utils.metrics import compute_forecast_metrics
 
 FORECAST_MONITOR_KEYS = {
     "val_loss": "loss",
+    "val_mse": "mse",
     "val_rmse": "rmse",
     "val_mae": "mae",
 }
@@ -31,6 +32,9 @@ class ForecastTask:
         self.cfg = cfg
         self.horizon = int(cfg["data"]["horizon"])
         self.target_scaler = target_scaler
+        self.metrics_in_normalized_space = bool(
+            cfg.get("data", {}).get("metrics_in_normalized_space", False)
+        )
         self.criterion = nn.MSELoss()
 
     def compute_loss(self, pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
@@ -61,6 +65,8 @@ class ForecastTask:
         pred_np,
         target_np,
     ) -> tuple:
+        if self.metrics_in_normalized_space:
+            return pred_np, target_np
         pred_np = inverse_transform_targets(self.target_scaler, pred_np)
         target_np = inverse_transform_targets(self.target_scaler, target_np)
         return pred_np, target_np

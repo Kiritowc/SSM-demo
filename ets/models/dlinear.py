@@ -7,7 +7,6 @@ from typing import Any
 import torch
 import torch.nn as nn
 
-from ets.data.ms_input import resolve_target_channel
 from ets.models.base import BaseForecastModel
 from ets.models.layers.decomposition import SeriesDecomp, resolve_decomp_kernel
 
@@ -70,14 +69,13 @@ class _DLinearCore(nn.Module):
 
 
 class DLinearModel(BaseForecastModel):
-    """Decomposition-linear model for MS forecasting."""
+    """Decomposition-linear model with readout for MS forecasting."""
 
     def __init__(
         self,
         input_size: int,
         seq_len: int,
         pred_len: int,
-        target_channel: int,
         individual: bool = False,
         decomp_kernel: int = 25,
         output_size: int = 1,
@@ -86,7 +84,6 @@ class DLinearModel(BaseForecastModel):
         self.input_size = input_size
         self.seq_len = seq_len
         self.pred_len = pred_len
-        self.target_channel = target_channel
         self.individual = individual
         self.decomp_kernel = decomp_kernel
         self.output_size = output_size
@@ -99,24 +96,23 @@ class DLinearModel(BaseForecastModel):
             individual=individual,
             decomp_kernel=decomp_kernel,
         )
+        self.readout = nn.Linear(input_size, 1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         out = self.core(x)
-        target_out = out[:, :, self.target_channel]
+        logits = self.readout(out).squeeze(-1)
         if self.pred_len == 1:
-            return target_out.view(-1, self.output_size)
-        return target_out.unsqueeze(-1)
+            return logits.view(-1, self.output_size)
+        return logits.unsqueeze(-1)
 
     @classmethod
     def from_config(cls, cfg: dict[str, Any], num_features: int) -> DLinearModel:
         model_cfg = cfg["model"]
         data_cfg = cfg["data"]
-        feature_cols = list(data_cfg["feature_cols"])
         return cls(
             input_size=num_features,
             seq_len=int(data_cfg["window_size"]),
             pred_len=int(data_cfg.get("horizon", 1)),
-            target_channel=resolve_target_channel(cfg, len(feature_cols)),
             individual=bool(model_cfg.get("individual", False)),
             decomp_kernel=int(model_cfg.get("decomp_kernel", 25)),
         )
@@ -126,7 +122,6 @@ class DLinearModel(BaseForecastModel):
             "input_size": self.input_size,
             "seq_len": self.seq_len,
             "pred_len": self.pred_len,
-            "target_channel": self.target_channel,
             "individual": self.individual,
             "decomp_kernel": self.decomp_kernel,
             "task_type": self.task_type,

@@ -65,8 +65,8 @@ def load_and_preprocess(cfg: dict[str, Any], project_root: str | None = None) ->
     feature_cols = list(data_cfg["feature_cols"])
     target_col = data_cfg.get("target_col")
 
-    numeric_cols = feature_cols.copy()
-    if target_col:
+    numeric_cols = list(feature_cols)
+    if target_col and target_col not in numeric_cols:
         numeric_cols.append(target_col)
 
     for col in numeric_cols:
@@ -112,4 +112,33 @@ def temporal_split(
     train_df = df.iloc[:train_end].reset_index(drop=True)
     val_df = df.iloc[train_end:val_end].reset_index(drop=True)
     test_df = df.iloc[val_end:].reset_index(drop=True)
+    return train_df, val_df, test_df
+
+
+def ett_fixed_split(
+    df: pd.DataFrame,
+    train_months: int = 12,
+    val_months: int = 4,
+    test_months: int = 4,
+    hours_per_month: int = 30 * 24,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """
+    Standard ETT split used by Informer / DLinear benchmarks.
+
+    ETTh: 12 months train, 4 months val, 4 months test (30 days x 24 hours).
+    """
+    train_len = train_months * hours_per_month
+    val_len = val_months * hours_per_month
+    test_len = test_months * hours_per_month
+    total_len = train_len + val_len + test_len
+
+    if len(df) < total_len:
+        raise ValueError(
+            f"ETT fixed split requires at least {total_len} rows, got {len(df)}."
+        )
+
+    bounded = df.iloc[:total_len].reset_index(drop=True)
+    train_df = bounded.iloc[:train_len].reset_index(drop=True)
+    val_df = bounded.iloc[train_len : train_len + val_len].reset_index(drop=True)
+    test_df = bounded.iloc[train_len + val_len : total_len].reset_index(drop=True)
     return train_df, val_df, test_df

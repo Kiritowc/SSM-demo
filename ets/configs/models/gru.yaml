@@ -1,0 +1,8 @@
+model:
+  name: gru
+  hidden_size: 200
+  num_layers: 2
+  dropout: 0.0
+  bidirectional: false
+  decoder_hidden_size: 128
+  decoder_layers: 2

@@ -122,4 +122,34 @@ class EncryptedOnnxExporter:
         return torch.load(buffer, map_location="cpu")
 
 
+def convert_and_save_model(opt) -> None:
+    from cv.paths import RUNTIME_YAML
+
+    if not hasattr(opt, "yaml"):
+        opt.yaml = RUNTIME_YAML
+    if not hasattr(opt, "thresh"):
+        opt.thresh = 0.50
+    if not hasattr(opt, "spp"):
+        opt.spp = "spp"
+    if not hasattr(opt, "ins"):
+        opt.ins = None
+    if not hasattr(opt, "ous"):
+        opt.ous = None
+
+    runtime = ExportRuntimeContext(
+        yaml_path=opt.yaml,
+        model_name=opt.model,
+        weight_path=opt.weight,
+        save_path=opt.save_path,
+        image_path=opt.img,
+        threshold=opt.thresh,
+        spp=opt.spp,
+        ins=opt.ins,
+        ous=opt.ous,
+        plain_onnx_path=getattr(opt, "plain_onnx", None),
+        preview=not getattr(opt, "skip_preview", False),
+    )
+    exporter_registry.build("encrypted-onnx").export(runtime)
+
+
 exporter_registry.register("encrypted-onnx", lambda: EncryptedOnnxExporter())

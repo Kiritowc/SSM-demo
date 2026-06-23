@@ -9,13 +9,29 @@ def mae(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return float(np.mean(np.abs(y_true - y_pred)))
 
 
+def mse(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    return float(np.mean((y_true - y_pred) ** 2))
+
+
+def format_params(num_params: int) -> str:
+    """Format parameter count as K/M abbreviation."""
+    if num_params >= 1_000_000:
+        value = num_params / 1_000_000
+        text = f"{value:.1f}M"
+        return text.replace(".0M", "M")
+    return f"{round(num_params / 1000)}K"
+
+
 def rmse(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return float(np.sqrt(np.mean((y_true - y_pred) ** 2)))
 
 
-def mape(y_true: np.ndarray, y_pred: np.ndarray, eps: float = 1e-8) -> float:
-    denom = np.maximum(np.abs(y_true), eps)
-    return float(np.mean(np.abs((y_true - y_pred) / denom)) * 100.0)
+def compute_forecast_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, float]:
+    return {
+        "mse": mse(y_true, y_pred),
+        "mae": mae(y_true, y_pred),
+        "rmse": rmse(y_true, y_pred),
+    }
 
 
 def accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
@@ -35,14 +51,6 @@ def f1_score(y_true: np.ndarray, y_pred: np.ndarray, num_classes: int) -> float:
     if not f1_scores:
         return 0.0
     return float(np.mean(f1_scores))
-
-
-def compute_forecast_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, float]:
-    return {
-        "mae": mae(y_true, y_pred),
-        "rmse": rmse(y_true, y_pred),
-        "mape": mape(y_true, y_pred),
-    }
 
 
 def compute_classify_metrics(

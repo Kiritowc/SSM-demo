@@ -7,7 +7,10 @@ import numpy as np
 import torch
 from torch import nn
 
-from cv.core.backbone import *
+from cv.core.backbone import build_registered_backbone, resolve_backbone_blueprint
+from cv.core.backbone.mi import MoEn
+from cv.core.backbone.ssg import NET_INFO, mcuNASNets, ssg_list
+from cv.paths import backbone_bin
 
 
 _vault = MoEn()
@@ -38,8 +41,8 @@ class BackboneDialectResolver:
         self, model_name: str
     ) -> Tuple[nn.Module, BackboneManifest]:
         artifact_coordinate = BackboneArtifactCoordinate(
-            structure_path=f"cv/core/backbone/ssg/{model_name}/S.bin",
-            weight_path=f"cv/core/backbone/ssg/{model_name}/W.bin",
+            structure_path=backbone_bin("ssg", model_name, "S.bin"),
+            weight_path=backbone_bin("ssg", model_name, "W.bin"),
         )
         net_config = self._decrypt_json(artifact_coordinate.structure_path)
         net_config["model_name"] = model_name

@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
+from cv.paths import backbone_bin
+
 from .nexus import (
     BackboneBlueprint,
     EncryptedArtifactSpec,
@@ -17,7 +19,7 @@ SSO_BLUEPRINTS = {
         stage_repeats=(2, 4, 2),
         stage_channels=(24, 36, 72, 144),
         notes=("shufflenetv2-family", "partial-pretrained"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/sso/sso_a.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("sso", "sso_a.bin")),
     ),
     "sso_b": BackboneBlueprint(
         identifier="sso_b",
@@ -39,7 +41,7 @@ SSO_BLUEPRINTS = {
         stage_repeats=(3, 6, 3),
         stage_channels=(24, 48, 96, 192),
         notes=("shufflenetv2-family", "partial-pretrained"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/sso/sso_d.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("sso", "sso_d.bin")),
     ),
     "sso_e": BackboneBlueprint(
         identifier="sso_e",

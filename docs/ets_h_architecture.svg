@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1030" height="1626" viewBox="0 0 1030 1626">
+<rect width="100%" height="100%" fill="#FAF9F6"/>
+<g>
+  <path d="M 515 117 C 515 128.25, 515 130.75, 515 142" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 142 L 510 135 L 520 135 Z" fill="#8E857C"/>
+  <path d="M 515 184 C 515 196.6, 515 199.4, 515 212" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 212 L 510 205 L 520 205 Z" fill="#8E857C"/>
+  <path d="M 440 163 C 310 296.5, -35 919.5, 95 1053" fill="none" stroke="#EB9D68" stroke-width="1.8"/>
+  <path d="M 95 1053 L 88 1048 L 88 1058 Z" fill="#EB9D68"/>
+  <path d="M 95 1053 C -35 1069.5, 340 1146.5, 470 1163" fill="none" stroke="#EB9D68" stroke-width="1.8"/>
+  <path d="M 470 1163 L 463 1158 L 463 1168 Z" fill="#EB9D68"/>
+  <path d="M 595 233 C 725 356, 1065 930, 935 1053" fill="none" stroke="#EB9D68" stroke-width="1.8"/>
+  <path d="M 935 1053 L 942 1048 L 942 1058 Z" fill="#EB9D68"/>
+  <path d="M 935 1053 C 1065 1069.5, 690 1146.5, 560 1163" fill="none" stroke="#EB9D68" stroke-width="1.8"/>
+  <path d="M 560 1163 L 567 1158 L 567 1168 Z" fill="#EB9D68"/>
+  <path d="M 515 254 C 515 271.1, 245 274.9, 245 292" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 245 292 L 240 285 L 250 285 Z" fill="#8E857C"/>
+  <path d="M 515 254 C 515 271.1, 385 274.9, 385 292" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 385 292 L 380 285 L 390 285 Z" fill="#8E857C"/>
+  <path d="M 515 254 C 515 271.1, 525 274.9, 525 292" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 292 L 520 285 L 530 285 Z" fill="#8E857C"/>
+  <path d="M 515 254 C 515 271.1, 785 274.9, 785 292" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 785 292 L 780 285 L 790 285 Z" fill="#8E857C"/>
+  <path d="M 245 334 C 245 378.1, 315 387.9, 315 432" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 315 432 L 310 425 L 320 425 Z" fill="#8E857C"/>
+  <path d="M 385 334 C 385 378.1, 315 387.9, 315 432" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 315 432 L 310 425 L 320 425 Z" fill="#8E857C"/>
+  <path d="M 785 334 C 785 346.6, 785 349.4, 785 362" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 785 362 L 780 355 L 790 355 Z" fill="#8E857C"/>
+  <path d="M 785 404 C 785 416.6, 315 419.4, 315 432" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 315 432 L 310 425 L 320 425 Z" fill="#8E857C"/>
+  <path d="M 315 474 C 315 486.6, 315 489.4, 315 502" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 315 502 L 310 495 L 320 495 Z" fill="#8E857C"/>
+  <path d="M 525 334 C 525 441.1, 525 464.9, 525 572" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 572 L 520 565 L 530 565 Z" fill="#8E857C"/>
+  <path d="M 315 544 C 315 556.6, 525 559.4, 525 572" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 572 L 520 565 L 530 565 Z" fill="#8E857C"/>
+  <path d="M 315 544 C 315 589, 525 599, 525 644" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 644 L 520 637 L 530 637 Z" fill="#8E857C"/>
+  <path d="M 525 614 C 525 627.5, 525 630.5, 525 644" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 644 L 520 637 L 530 637 Z" fill="#8E857C"/>
+  <path d="M 525 682 C 525 695.5, 525 698.5, 525 712" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 712 L 520 705 L 530 705 Z" fill="#8E857C"/>
+  <path d="M 525 754 C 525 766.6, 525 769.4, 525 782" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 782 L 520 775 L 530 775 Z" fill="#8E857C"/>
+  <path d="M 525 824 C 525 836.6, 525 839.4, 525 852" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 852 L 520 845 L 530 845 Z" fill="#8E857C"/>
+  <path d="M 525 894 C 525 906.6, 525 909.4, 525 922" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 922 L 520 915 L 530 915 Z" fill="#8E857C"/>
+  <path d="M 525 964 C 525 976.6, 525 979.4, 525 992" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 992 L 520 985 L 530 985 Z" fill="#8E857C"/>
+  <path d="M 525 1034 C 525 1046.6, 525 1049.4, 525 1062" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 525 1062 L 520 1055 L 530 1055 Z" fill="#8E857C"/>
+  <path d="M 525 1104 C 525 1122, 515 1126, 515 1144" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1144 L 510 1137 L 520 1137 Z" fill="#8E857C"/>
+  <path d="M 515 1182 C 515 1200, 275 1204, 275 1222" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 275 1222 L 270 1215 L 280 1215 Z" fill="#8E857C"/>
+  <path d="M 515 1182 C 515 1200, 395 1204, 395 1222" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 395 1222 L 390 1215 L 400 1215 Z" fill="#8E857C"/>
+  <path d="M 515 1182 C 515 1200, 515 1204, 515 1222" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1222 L 510 1215 L 520 1215 Z" fill="#8E857C"/>
+  <path d="M 515 1182 C 515 1200, 635 1204, 635 1222" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 635 1222 L 630 1215 L 640 1215 Z" fill="#8E857C"/>
+  <path d="M 515 1182 C 515 1200, 755 1204, 755 1222" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 755 1222 L 750 1215 L 760 1215 Z" fill="#8E857C"/>
+  <path d="M 275 1264 C 275 1282, 515 1286, 515 1304" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1304 L 510 1297 L 520 1297 Z" fill="#8E857C"/>
+  <path d="M 395 1264 C 395 1282, 515 1286, 515 1304" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1304 L 510 1297 L 520 1297 Z" fill="#8E857C"/>
+  <path d="M 515 1264 C 515 1282, 515 1286, 515 1304" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1304 L 510 1297 L 520 1297 Z" fill="#8E857C"/>
+  <path d="M 635 1264 C 635 1282, 515 1286, 515 1304" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1304 L 510 1297 L 520 1297 Z" fill="#8E857C"/>
+  <path d="M 755 1264 C 755 1282, 515 1286, 515 1304" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1304 L 510 1297 L 520 1297 Z" fill="#8E857C"/>
+  <path d="M 515 1342 C 515 1355.5, 515 1358.5, 515 1372" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1372 L 510 1365 L 520 1365 Z" fill="#8E857C"/>
+  <path d="M 515 1414 C 515 1426.6, 515 1429.4, 515 1442" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1442 L 510 1435 L 520 1435 Z" fill="#8E857C"/>
+  <path d="M 515 1484 C 515 1495.25, 515 1497.75, 515 1509" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 515 1509 L 510 1502 L 520 1502 Z" fill="#8E857C"/>
+  <defs>
+    <linearGradient id="grad_input" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E6ECEE" />
+      <stop offset="100%" stop-color="#D1DFE4" />
+    </linearGradient>
+</defs>
+  <rect x="425" y="69" width="180" height="48" rx="8" ry="8" fill="url(#grad_input)" stroke="#A9C1C9" stroke-width="1.2"/>
+  <text x="515" y="97" font-family="sans-serif" font-size="12" font-weight="600" fill="#3E5158" text-anchor="middle">Input x</text>
+  <defs>
+    <linearGradient id="grad_revin" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="440" y="142" width="150" height="42" rx="8" ry="8" fill="url(#grad_revin)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="515" y="167" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">RevIN</text>
+  <defs>
+    <linearGradient id="grad_grouped_stem" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#698C7F" />
+      <stop offset="100%" stop-color="#527065" />
+    </linearGradient>
+</defs>
+  <rect x="435" y="212" width="160" height="42" rx="8" ry="8" fill="url(#grad_grouped_stem)" stroke="#40574F" stroke-width="1.2"/>
+  <text x="515" y="237" font-family="sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle">Grouped Stem</text>
+  <defs>
+    <linearGradient id="grad_short_branch" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E2D5F2" />
+      <stop offset="100%" stop-color="#C3AFF1" />
+    </linearGradient>
+</defs>
+  <rect x="190" y="292" width="110" height="42" rx="8" ry="8" fill="url(#grad_short_branch)" stroke="#9E85CA" stroke-width="1.2"/>
+  <text x="245" y="317" font-family="sans-serif" font-size="12" font-weight="600" fill="#4D337A" text-anchor="middle">Short Branch</text>
+  <defs>
+    <linearGradient id="grad_med_branch" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E2D5F2" />
+      <stop offset="100%" stop-color="#C3AFF1" />
+    </linearGradient>
+</defs>
+  <rect x="330" y="292" width="110" height="42" rx="8" ry="8" fill="url(#grad_med_branch)" stroke="#9E85CA" stroke-width="1.2"/>
+  <text x="385" y="317" font-family="sans-serif" font-size="12" font-weight="600" fill="#4D337A" text-anchor="middle">Med Branch</text>
+  <defs>
+    <linearGradient id="grad_pyramid_skip" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="465" y="292" width="120" height="42" rx="8" ry="8" fill="url(#grad_pyramid_skip)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="525" y="317" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Pyramid Skip</text>
+  <defs>
+    <linearGradient id="grad_multikernel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F7C9AB" />
+      <stop offset="100%" stop-color="#EB9B65" />
+    </linearGradient>
+</defs>
+  <rect x="715" y="292" width="140" height="42" rx="8" ry="8" fill="url(#grad_multikernel)" stroke="#CF7D44" stroke-width="1.2"/>
+  <text x="785" y="317" font-family="sans-serif" font-size="12" font-weight="600" fill="#5D2B09" text-anchor="middle">MultiKernel</text>
+  <defs>
+    <linearGradient id="grad_dw_sep" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F7C9AB" />
+      <stop offset="100%" stop-color="#EB9B65" />
+    </linearGradient>
+</defs>
+  <rect x="715" y="362" width="140" height="42" rx="8" ry="8" fill="url(#grad_dw_sep)" stroke="#CF7D44" stroke-width="1.2"/>
+  <text x="785" y="387" font-family="sans-serif" font-size="12" font-weight="600" fill="#5D2B09" text-anchor="middle">DW Sep</text>
+  <defs>
+    <linearGradient id="grad_dynamic_gate" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="235" y="432" width="160" height="42" rx="8" ry="8" fill="url(#grad_dynamic_gate)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="315" y="457" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Dynamic Gate</text>
+  <defs>
+    <linearGradient id="grad_fuse" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="235" y="502" width="160" height="42" rx="8" ry="8" fill="url(#grad_fuse)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="315" y="527" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">Fuse</text>
+  <defs>
+    <linearGradient id="grad_patch_conv" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="465" y="572" width="120" height="42" rx="8" ry="8" fill="url(#grad_patch_conv)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="525" y="597" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Patch Conv</text>
+  <defs>
+    <linearGradient id="grad_add_mid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="480" y="644" width="90" height="38" rx="8" ry="8" fill="url(#grad_add_mid)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="525" y="667" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Add</text>
+  <defs>
+    <linearGradient id="grad_pm1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="445" y="712" width="160" height="42" rx="8" ry="8" fill="url(#grad_pm1)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="525" y="737" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">Parallel Mix 1</text>
+  <defs>
+    <linearGradient id="grad_pm2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="445" y="782" width="160" height="42" rx="8" ry="8" fill="url(#grad_pm2)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="525" y="807" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">Parallel Mix 2</text>
+  <defs>
+    <linearGradient id="grad_lk_dw" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="445" y="852" width="160" height="42" rx="8" ry="8" fill="url(#grad_lk_dw)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="525" y="877" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">Large Kernel DW</text>
+  <defs>
+    <linearGradient id="grad_inv_glu" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="445" y="922" width="160" height="42" rx="8" ry="8" fill="url(#grad_inv_glu)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="525" y="947" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">Inverted GLU</text>
+  <defs>
+    <linearGradient id="grad_conv_ffn" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="445" y="992" width="160" height="42" rx="8" ry="8" fill="url(#grad_conv_ffn)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="525" y="1017" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">ConvFFN</text>
+  <defs>
+    <linearGradient id="grad_temp_block" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="445" y="1062" width="160" height="42" rx="8" ry="8" fill="url(#grad_temp_block)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="525" y="1087" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">TemporalBlock</text>
+  <defs>
+    <linearGradient id="grad_raw_skip" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="95" y="1034" width="100" height="38" rx="8" ry="8" fill="url(#grad_raw_skip)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="145" y="1057" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Raw Skip</text>
+  <defs>
+    <linearGradient id="grad_input_skip" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="835" y="1034" width="100" height="38" rx="8" ry="8" fill="url(#grad_input_skip)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="885" y="1057" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Input Skip</text>
+  <defs>
+    <linearGradient id="grad_add_bottom" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="470" y="1144" width="90" height="38" rx="8" ry="8" fill="url(#grad_add_bottom)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="515" y="1167" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Add</text>
+  <defs>
+    <linearGradient id="grad_last_t" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="230" y="1222" width="90" height="42" rx="8" ry="8" fill="url(#grad_last_t)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="275" y="1247" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Last t</text>
+  <defs>
+    <linearGradient id="grad_local_win" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="350" y="1222" width="90" height="42" rx="8" ry="8" fill="url(#grad_local_win)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="395" y="1247" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Local Win</text>
+  <defs>
+    <linearGradient id="grad_dw_pool" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="470" y="1222" width="90" height="42" rx="8" ry="8" fill="url(#grad_dw_pool)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="515" y="1247" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">DW Pool</text>
+  <defs>
+    <linearGradient id="grad_avg_pool" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="590" y="1222" width="90" height="42" rx="8" ry="8" fill="url(#grad_avg_pool)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="635" y="1247" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Avg Pool</text>
+  <defs>
+    <linearGradient id="grad_max_pool" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="710" y="1222" width="90" height="42" rx="8" ry="8" fill="url(#grad_max_pool)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="755" y="1247" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Max Pool</text>
+  <defs>
+    <linearGradient id="grad_concat" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="470" y="1304" width="90" height="38" rx="8" ry="8" fill="url(#grad_concat)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="515" y="1327" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Concat</text>
+  <defs>
+    <linearGradient id="grad_linear" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="435" y="1372" width="160" height="42" rx="8" ry="8" fill="url(#grad_linear)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="515" y="1397" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Linear</text>
+  <defs>
+    <linearGradient id="grad_group_head" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="435" y="1442" width="160" height="42" rx="8" ry="8" fill="url(#grad_group_head)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="515" y="1467" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Group Head</text>
+  <defs>
+    <linearGradient id="grad_output" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#CCEBD0" />
+      <stop offset="100%" stop-color="#A1DBA6" />
+    </linearGradient>
+</defs>
+  <rect x="425" y="1509" width="180" height="48" rx="8" ry="8" fill="url(#grad_output)" stroke="#74B87C" stroke-width="1.2"/>
+  <text x="515" y="1537" font-family="sans-serif" font-size="12" font-weight="600" fill="#163E16" text-anchor="middle">Output</text>
+</g>
+</svg>

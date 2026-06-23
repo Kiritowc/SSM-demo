@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="810" height="796" viewBox="0 0 810 796">
+<rect width="100%" height="100%" fill="#FAF9F6"/>
+<g>
+  <path d="M 405 117 C 405 137.25, 205 216.75, 205 232" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 205 232 L 200 225 L 210 225 Z" fill="#8E857C"/>
+  <path d="M 405 117 C 405 137.25, 605 216.75, 605 232" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 605 232 L 600 225 L 610 225 Z" fill="#8E857C"/>
+
+  <path d="M 205 274 L 165 274" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 205 274 L 245 274" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 165 274 C 165 291.1, 120 294.9, 120 312" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 120 312 L 115 305 L 125 305 Z" fill="#8E857C"/>
+  <path d="M 245 274 C 245 291.1, 290 294.9, 290 312" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 290 312 L 285 305 L 295 305 Z" fill="#8E857C"/>
+  <path d="M 120 354 C 120 366.6, 120 369.4, 120 382" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 120 382 L 115 375 L 125 375 Z" fill="#8E857C"/>
+  <path d="M 290 354 C 290 366.6, 290 369.4, 290 382" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 290 382 L 285 375 L 295 375 Z" fill="#8E857C"/>
+  <path d="M 120 424 C 120 437.5, 182.5 440.5, 182.5 454" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 182.5 454 L 177.5 447 L 187.5 447 Z" fill="#8E857C"/>
+  <path d="M 290 424 C 290 437.5, 227.5 440.5, 227.5 454" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 227.5 454 L 222.5 447 L 232.5 447 Z" fill="#8E857C"/>
+  <path d="M 205 492 C 205 505.95, 205 509.05, 205 523" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 205 523 L 200 516 L 210 516 Z" fill="#8E857C"/>
+  <path d="M 205 563 C 205 570.45, 405 576.55, 405 604" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 405 604 L 400 597 L 410 597 Z" fill="#8E857C"/>
+
+  <path d="M 605 274 C 605 286.6, 605 289.4, 605 302" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 605 302 L 600 295 L 610 295 Z" fill="#8E857C"/>
+  <path d="M 605 344 C 605 356.6, 605 359.4, 605 372" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 605 372 L 600 365 L 610 365 Z" fill="#8E857C"/>
+  <path d="M 605 414 C 605 426.6, 605 429.4, 605 442" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 605 442 L 600 435 L 610 435 Z" fill="#8E857C"/>
+  <path d="M 605 484 C 605 497.05, 605 499.95, 605 513" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 605 513 L 600 506 L 610 506 Z" fill="#8E857C"/>
+  <path d="M 605 553 C 605 575.95, 405 581.05, 405 604" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 405 604 L 400 597 L 410 597 Z" fill="#8E857C"/>
+  <path d="M 405 642 C 405 658.65, 405 662.35, 405 679" fill="none" stroke="#8E857C" stroke-width="1.5"/>
+  <path d="M 405 679 L 400 672 L 410 672 Z" fill="#8E857C"/>
+  <defs>
+    <linearGradient id="grad_input" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E6ECEE" />
+      <stop offset="100%" stop-color="#D1DFE4" />
+    </linearGradient>
+</defs>
+  <rect x="315" y="69" width="180" height="48" rx="8" ry="8" fill="url(#grad_input)" stroke="#A9C1C9" stroke-width="1.2"/>
+  <text x="405" y="97" font-family="sans-serif" font-size="12" font-weight="600" fill="#3E5158" text-anchor="middle">Input x</text>
+  <defs>
+    <linearGradient id="grad_decomp" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#698C7F" />
+      <stop offset="100%" stop-color="#527065" />
+    </linearGradient>
+</defs>
+  <rect x="125" y="232" width="160" height="42" rx="8" ry="8" fill="url(#grad_decomp)" stroke="#40574F" stroke-width="1.2"/>
+  <text x="205" y="257" font-family="sans-serif" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle">FullChannelDecompLinear</text>
+  <defs>
+    <linearGradient id="grad_seasonal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F7C9AB" />
+      <stop offset="100%" stop-color="#EB9B65" />
+    </linearGradient>
+</defs>
+  <rect x="80" y="312" width="80" height="42" rx="8" ry="8" fill="url(#grad_seasonal)" stroke="#CF7D44" stroke-width="1.2"/>
+  <text x="120" y="337" font-family="sans-serif" font-size="12" font-weight="600" fill="#5D2B09" text-anchor="middle">Seasonal</text>
+  <defs>
+    <linearGradient id="grad_trend" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E2D5F2" />
+      <stop offset="100%" stop-color="#C3AFF1" />
+    </linearGradient>
+</defs>
+  <rect x="250" y="312" width="80" height="42" rx="8" ry="8" fill="url(#grad_trend)" stroke="#9E85CA" stroke-width="1.2"/>
+  <text x="290" y="337" font-family="sans-serif" font-size="12" font-weight="600" fill="#4D337A" text-anchor="middle">Trend</text>
+  <defs>
+    <linearGradient id="grad_linear_s" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="80" y="382" width="80" height="42" rx="8" ry="8" fill="url(#grad_linear_s)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="120" y="407" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Linear</text>
+  <defs>
+    <linearGradient id="grad_linear_t" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="250" y="382" width="80" height="42" rx="8" ry="8" fill="url(#grad_linear_t)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="290" y="407" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Linear</text>
+  <defs>
+    <linearGradient id="grad_add_l" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="160" y="454" width="90" height="38" rx="8" ry="8" fill="url(#grad_add_l)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="205" y="477" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Add</text>
+  <defs>
+    <linearGradient id="grad_y_lin" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="145" y="523" width="120" height="40" rx="8" ry="8" fill="url(#grad_y_lin)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="205" y="547" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1E461E" text-anchor="middle">y<tspan dy="4" font-size="10">lin</tspan></text>
+  <defs>
+    <linearGradient id="grad_temp_1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="525" y="232" width="160" height="42" rx="8" ry="8" fill="url(#grad_temp_1)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="605" y="257" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">TemporalBlock 1</text>
+  <defs>
+    <linearGradient id="grad_temp_2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="525" y="302" width="160" height="42" rx="8" ry="8" fill="url(#grad_temp_2)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="605" y="327" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">TemporalBlock 2</text>
+  <defs>
+    <linearGradient id="grad_last_t" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF1CD" />
+      <stop offset="100%" stop-color="#F6CD71" />
+    </linearGradient>
+</defs>
+  <rect x="525" y="372" width="160" height="42" rx="8" ry="8" fill="url(#grad_last_t)" stroke="#DBA634" stroke-width="1.2"/>
+  <text x="605" y="397" font-family="sans-serif" font-size="12" font-weight="600" fill="#644300" text-anchor="middle">Last t</text>
+  <defs>
+    <linearGradient id="grad_linear_r" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="525" y="442" width="160" height="42" rx="8" ry="8" fill="url(#grad_linear_r)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="605" y="467" font-family="sans-serif" font-size="12" font-weight="600" fill="#1E461E" text-anchor="middle">Linear</text>
+  <defs>
+    <linearGradient id="grad_y_tcn" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DCF2DC" />
+      <stop offset="100%" stop-color="#AEDCAE" />
+    </linearGradient>
+</defs>
+  <rect x="545" y="513" width="120" height="40" rx="8" ry="8" fill="url(#grad_y_tcn)" stroke="#80B880" stroke-width="1.2"/>
+  <text x="605" y="537" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1E461E" text-anchor="middle">y<tspan dy="4" font-size="10">tcn</tspan></text>
+  <defs>
+    <linearGradient id="grad_add_g" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F9DCE2" />
+      <stop offset="100%" stop-color="#F1B8C8" />
+    </linearGradient>
+</defs>
+  <rect x="355" y="604" width="100" height="38" rx="8" ry="8" fill="url(#grad_add_g)" stroke="#D996A7" stroke-width="1.2"/>
+  <text x="405" y="627" font-family="sans-serif" font-size="12" font-weight="600" fill="#863548" text-anchor="middle">Add</text>
+  <defs>
+    <linearGradient id="grad_output" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#CCEBD0" />
+      <stop offset="100%" stop-color="#A1DBA6" />
+    </linearGradient>
+</defs>
+  <rect x="315" y="679" width="180" height="48" rx="8" ry="8" fill="url(#grad_output)" stroke="#74B87C" stroke-width="1.2"/>
+  <text x="405" y="707" font-family="sans-serif" font-size="12" font-weight="600" fill="#163E16" text-anchor="middle">Output</text>
+</g>
+</svg>

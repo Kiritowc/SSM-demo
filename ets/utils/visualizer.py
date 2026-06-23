@@ -78,7 +78,7 @@ def plot_training_curves(
 
     # Task metrics
     if task_type == "forecast":
-        metric_keys = ["mae", "rmse", "mape"]
+        metric_keys = ["mae", "rmse"]
         metric_title = "Forecast Metrics"
     else:
         metric_keys = ["accuracy", "f1"]

@@ -1,103 +1,61 @@
 #!/usr/bin/env python3
-"""SSM platform CLI."""
+"""SSM platform CLI — service lifecycle (up / down)."""
+
 from __future__ import annotations
 
 import argparse
 import os
 import subprocess
 import sys
-from pathlib import Path
+
+from ssm.paths import repo_root
+from ssm.video import start_video_server, stop_video_server
 
 
-def _root() -> Path:
-    return Path(os.environ.get("SSM_ROOT", Path(__file__).resolve().parents[1]))
-
-
-def _run(cmd: list[str], *, cwd: Path | None = None) -> int:
+def _run(cmd: list[str], *, cwd=None) -> int:
+    root = repo_root()
     env = os.environ.copy()
-    env["SSM_ROOT"] = str(_root())
+    env["SSM_ROOT"] = str(root)
     print("+", " ".join(cmd))
-    return subprocess.call(cmd, cwd=str(cwd or _root()), env=env)
+    return subprocess.call(cmd, cwd=str(cwd or root), env=env)
 
 
 def cmd_up(args: argparse.Namespace) -> int:
-    root = _root()
+    root = repo_root()
+    if args.vlm_only and args.video_only:
+        print("error: --vlm-only and --video-only are mutually exclusive", file=sys.stderr)
+        return 2
+
+    start_vlm = not args.video_only
+    start_video = not args.vlm_only
+
     rc = 0
-    if args.vlm:
-        rc = _run(["bash", str(root / "services/vlm-server/scripts/start.sh")])
-    if rc == 0 and args.video:
-        rc = _run([sys.executable, str(root / "services/video/server.py")], cwd=root)
+    if start_vlm:
+        rc = _run(["bash", str(root / "vlm/services/scripts/start.sh")])
+    if rc == 0 and start_video:
+        print("+ video server (background)", flush=True)
+        start_video_server()
     return rc
 
 
-def cmd_down(args: argparse.Namespace) -> int:
-    root = _root()
-    _run(["bash", str(root / "services/vlm-server/scripts/stop.sh")])
-    subprocess.call(["pkill", "-f", "services/video/server.py"], stderr=subprocess.DEVNULL)
+def cmd_down(_: argparse.Namespace) -> int:
+    _run(["bash", str(repo_root() / "vlm/services/scripts/stop.sh")])
+    stop_video_server(wait_sec=0)
     return 0
-
-
-def cmd_demo(_: argparse.Namespace) -> int:
-    root = _root()
-    _run(["bash", str(root / "services/vlm-server/scripts/start.sh")])
-    print("Web UI: http://127.0.0.1:9080/")
-    print("Start video in another terminal: ssm up --video-only")
-    return 0
-
-
-def cmd_train_cv(args: argparse.Namespace) -> int:
-    root = _root()
-    cmd = [sys.executable, "-m", "cv.train"]
-    if args.configfile:
-        cmd += ["--configfile", args.configfile]
-    rc = _run(cmd)
-    if rc == 0 and args.deploy:
-        return _run([sys.executable, "-m", "cv.post_deploy", "--restart-camera"])
-    return rc
-
-
-def cmd_train_ets(args: argparse.Namespace) -> int:
-    root = _root()
-    script = root / "ets/scripts/train.py"
-    cmd = [sys.executable, str(script), "--config", str(root / "configs/ets/default.yaml")]
-    if args.model:
-        cmd += ["--model", args.model]
-    if args.data:
-        cmd += ["--data-profile", args.data]
-    if args.epochs:
-        cmd += ["--epochs", str(args.epochs)]
-    return _run(cmd)
 
 
 def main(argv: list[str] | None = None) -> int:
-    os.environ.setdefault("SSM_ROOT", str(_root()))
-    parser = argparse.ArgumentParser(prog="ssm", description="SSM monorepo CLI")
+    os.environ.setdefault("SSM_ROOT", str(repo_root()))
+    parser = argparse.ArgumentParser(prog="ssm", description="SSM service CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    up = sub.add_parser("up", help="Start services")
-    up.add_argument("--vlm-only", action="store_true", dest="vlm")
-    up.add_argument("--video-only", action="store_true", dest="video")
-    up.set_defaults(vlm=True, video=True, func=cmd_up)
+    up = sub.add_parser("up", help="Start services (default: VLM + video)")
+    up.add_argument("--vlm-only", action="store_true", help="Start VLM only")
+    up.add_argument("--video-only", action="store_true", help="Start video server only")
+    up.set_defaults(func=cmd_up)
 
     down = sub.add_parser("down", help="Stop services")
     down.set_defaults(func=cmd_down)
-
-    demo = sub.add_parser("demo", help="Start VLM and print demo URLs")
-    demo.set_defaults(func=cmd_demo)
-
-    train = sub.add_parser("train", help="Train models")
-    train_sub = train.add_subparsers(dest="target", required=True)
-
-    cv = train_sub.add_parser("cv", help="Train CV model")
-    cv.add_argument("--configfile", default="")
-    cv.add_argument("--deploy", action="store_true")
-    cv.set_defaults(func=cmd_train_cv)
-
-    ets = train_sub.add_parser("ets", help="Train ETS model")
-    ets.add_argument("--model", default="ets_a")
-    ets.add_argument("--data", default="scada")
-    ets.add_argument("--epochs", type=int, default=0)
-    ets.set_defaults(func=cmd_train_ets)
 
     args = parser.parse_args(argv)
     return args.func(args)

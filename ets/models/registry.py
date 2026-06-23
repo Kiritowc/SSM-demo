@@ -13,18 +13,22 @@ from ets.models.lstm import LSTMModel
 from ets.models.ets_a import EtsAModel
 from ets.models.ets_b import EtsBModel
 from ets.models.ets_c import EtsCModel
-from ets.models.tcn import TCNModel
+from ets.models.ets_h import EtsHModel
+from ets.models.tcn import NfTCNModel, TCNModel
 
 ModelType = Union[Type[BaseSequenceModel], Type[BaseForecastModel]]
 
 MODEL_REGISTRY: dict[str, ModelType] = {
     "lstm": LSTMModel,
     "gru": GRUModel,
-    "tcn": TCNModel,
+    "tcn": NfTCNModel,
+    "ets_t": TCNModel,
     "dlinear": DLinearModel,
     "ets_a": EtsAModel,
+    "ets_m": EtsAModel,
     "ets_b": EtsBModel,
     "ets_c": EtsCModel,
+    "ets_h": EtsHModel,
 }
 
 

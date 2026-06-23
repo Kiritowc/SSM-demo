@@ -2,12 +2,20 @@
 """Training entry point."""
 from __future__ import annotations
 
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+_REPO = Path(__file__).resolve().parents[2]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+os.environ.setdefault("SSM_ROOT", str(_REPO))
+
+from ssm.bootstrap import bootstrap_repo, ensure_runtime_python
+
+REPO_ROOT = bootstrap_repo(_REPO)
+ensure_runtime_python("numpy", "torch")
 from ets.data.datamodule import DataModule
 from ets.engine.evaluator import Evaluator
 from ets.engine.trainer import Trainer
@@ -36,11 +44,11 @@ def main() -> None:
     args = parse_args()
     requested_monitor = args.monitor
     args.monitor, args.monitor_mode = resolve_early_stopping(args.task, args.monitor)
-    config_path = PROJECT_ROOT / args.config
+    config_path = REPO_ROOT / args.config
     cfg = load_config(
         [config_path],
         overrides=build_train_overrides(args),
-        project_root=PROJECT_ROOT,
+        project_root=REPO_ROOT,
     )
     local_rank = setup_distributed(args.local_rank)
     logger = setup_logger("ets", style="train")
@@ -70,7 +78,7 @@ def main() -> None:
     if resume_path:
         resume_candidate = Path(resume_path)
         if not resume_candidate.is_absolute():
-            resume_candidate = PROJECT_ROOT / resume_candidate
+            resume_candidate = REPO_ROOT / resume_candidate
         resume_file = resolve_checkpoint(resume_candidate, prefer="last")
         resume_path = str(resume_file)
         cfg["train"]["resume"] = resume_path
@@ -78,13 +86,16 @@ def main() -> None:
     else:
         run_prefix = train_cfg.get("exp_name") or str(cfg["model"]["name"]).lower()
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        run_dir = Path(train_cfg["log_dir"]) / f"{run_prefix}_{timestamp}"
+        log_dir = Path(train_cfg["log_dir"])
+        if not log_dir.is_absolute():
+            log_dir = REPO_ROOT / log_dir
+        run_dir = log_dir / f"{run_prefix}_{timestamp}"
     if is_main_process():
         run_dir.mkdir(parents=True, exist_ok=True)
     device = get_device(cfg.get("device", "auto"))
     if local_rank >= 0 and device.type == "cuda":
         device = get_device("cuda")
-    data_module = DataModule(cfg, project_root=str(PROJECT_ROOT))
+    data_module = DataModule(cfg, project_root=str(REPO_ROOT))
     bundle = data_module.setup()
     if is_main_process():
         logger.info(
@@ -148,12 +159,33 @@ def parse_args():
     import argparse
     from ets.utils.script_overrides import CLASSIFY_MONITORS, FORECAST_MONITORS
 
+    if not hasattr(argparse, "BooleanOptionalAction"):
+        class BooleanOptionalAction(argparse.Action):
+            def __init__(self, option_strings, dest, default=None, **kwargs):
+                if default is None:
+                    default = False
+                opts: list[str] = []
+                for opt in option_strings:
+                    if opt.startswith("--no-"):
+                        continue
+                    opts.append(opt)
+                    opts.append(f"--no-{opt[2:]}")
+                super().__init__(opts, dest, nargs=0, default=default, **kwargs)
+
+            def __call__(self, parser, namespace, values, option_string=None):
+                if option_string is not None and option_string.startswith("--no-"):
+                    setattr(namespace, self.dest, False)
+                else:
+                    setattr(namespace, self.dest, True)
+
+        argparse.BooleanOptionalAction = BooleanOptionalAction
+
     models = sorted(MODEL_REGISTRY.keys())
     monitors = sorted(set(FORECAST_MONITORS + CLASSIFY_MONITORS))
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", default="configs/ets/default.yaml")
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--config", default="ets/configs/default.yaml")
     parser.add_argument("--data-profile", default="air_quality")
-    parser.add_argument("--model", choices=models, default="ets_a")
+    parser.add_argument("--model", choices=models, default="ets_b")
     parser.add_argument("--hidden-size", default=128, type=int)
     parser.add_argument("--num-layers", default=2, type=int)
     parser.add_argument("--dropout", default=0.1, type=float)
@@ -162,6 +194,7 @@ def parse_args():
     parser.add_argument("--window-size", default=24, type=int)
     parser.add_argument("--horizon", default=1, type=int)
     parser.add_argument("--scale-target", default=True, action=argparse.BooleanOptionalAction)
+    parser.add_argument("--input-mode", default=None, choices=["ms", "features_only"])
     parser.add_argument("--epochs", default=100, type=int)
     parser.add_argument("--batch-size", default=64, type=int)
     parser.add_argument("--lr", default=0.001, type=float)
@@ -178,6 +211,14 @@ def parse_args():
     parser.add_argument("--monitor", default="val_rmse", choices=monitors)
     parser.add_argument("--resume", default="")
     parser.add_argument("--local-rank", default=-1, type=int)
+    parser.add_argument("--num-channels", default="")
+    parser.add_argument("--dilations", default="")
+    parser.add_argument("--encoder-hidden-size", default=None, type=int)
+    parser.add_argument("--decoder-hidden-size", default=None, type=int)
+    parser.add_argument("--decoder-layers", default=None, type=int)
+    parser.add_argument("--log-dir", default="")
+    parser.add_argument("--kernel-size", default=None, type=int)
+    parser.add_argument("--no-visualization", default=False, action="store_true")
     return parser.parse_args()
 
 if __name__ == "__main__":

@@ -1,8 +1,0 @@
-model:
-  name: tcn
-  num_channels: [32, 32, 32]
-  kernel_size: 3
-  dropout: 0.1
-
-data:
-  input_mode: ms

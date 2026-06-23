@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader, DistributedSampler
 
 from ets.data.dataset import SlidingWindowDataset
 from ets.data.ms_input import build_ms_inputs, get_input_mode, resolve_num_features
-from ets.data.preprocess import load_and_preprocess, temporal_split
+from ets.data.preprocess import ett_fixed_split, load_and_preprocess, temporal_split
 from ets.utils.distributed import is_distributed
 
 
@@ -56,10 +56,17 @@ class DataModule:
         window_size = int(self.data_cfg["window_size"])
         horizon = int(self.data_cfg["horizon"])
         stride = int(self.data_cfg.get("stride", 1))
-        train_ratio = float(self.data_cfg.get("train_ratio", 0.7))
-        val_ratio = float(self.data_cfg.get("val_ratio", 0.15))
-
-        train_df, val_df, test_df = temporal_split(df, train_ratio, val_ratio)
+        split_mode = str(self.data_cfg.get("split_mode", "ratio")).lower()
+        if split_mode == "ett_fixed":
+            hours_per_month = int(self.data_cfg.get("ett_hours_per_month", 30 * 24))
+            train_df, val_df, test_df = ett_fixed_split(
+                df,
+                hours_per_month=hours_per_month,
+            )
+        else:
+            train_ratio = float(self.data_cfg.get("train_ratio", 0.7))
+            val_ratio = float(self.data_cfg.get("val_ratio", 0.15))
+            train_df, val_df, test_df = temporal_split(df, train_ratio, val_ratio)
 
         train_features = train_df[feature_cols].values
         self.feature_scaler.fit(train_features)

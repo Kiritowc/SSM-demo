@@ -1,0 +1,8 @@
+model:
+  name: lstm
+  hidden_size: 128
+  num_layers: 2
+  dropout: 0.0
+  bidirectional: false
+  decoder_hidden_size: 128
+  decoder_layers: 2

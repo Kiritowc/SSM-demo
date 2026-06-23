@@ -135,5 +135,4 @@ def walk_forward_evaluate(
         "folds": fold_results,
         "mae_mean": float(np.mean([m["mae"] for m in fold_results])),
         "rmse_mean": float(np.mean([m["rmse"] for m in fold_results])),
-        "mape_mean": float(np.mean([m["mape"] for m in fold_results])),
     }

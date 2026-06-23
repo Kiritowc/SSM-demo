@@ -4,10 +4,10 @@ import os
 
 import yaml
 import torch
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from cv.cfg import *
-from cv.core.backbone import *
+from cv.cfg import device
+from cv.core.backbone.mi import MoEn
 
 
 def _iou_xyxy_1_nm(one: torch.Tensor, rest: torch.Tensor) -> torch.Tensor:
@@ -197,103 +197,6 @@ def handle_preds(preds, device, conf_thresh=0.25, nms_thresh=0.45):
                 output.append(temp[i])
         output_bboxes.append(torch.Tensor(output))
     return output_bboxes
-
-
-def calTimeDelta(timestamp1="09:21:22", timestamp2="10:21:22", format="%H:%M:%S"):
-    """
-    计算给定的两个时间之间的差值
-    """
-    T1 = datetime.strptime(timestamp1, format)
-    T2 = datetime.strptime(timestamp2, format)
-    delta = T2 - T1
-    day_num = delta.days
-    sec_num = delta.seconds
-    sec = 86400 * day_num + sec_num
-    return sec
-
-
-def getFutureDay(timestamp, days, format="%Y-%m-%d"):
-    """
-    以给定时间戳为基准，前进 days 天得到对应的时间戳
-    """
-    now_time = datetime.strptime(timestamp, format)
-    for i in range(days):
-        now_time += timedelta(days=1)
-    next_timestamp = now_time.strftime(format)
-    return next_timestamp
-
-
-def calculate_next_training_time(allow_train_time_list):
-    """
-    计算下一个训练时间
-    """
-    current_day = datetime.now().strftime("%Y-%m-%d")
-    current_time = datetime.now().strftime("%H:%M:%S")
-    # current_time = "23:30:00"
-    print("current_time: ", current_time)
-    delta_dict = {}
-    neg_flag = False
-    neg_delta_dict = {}
-    for one_list in allow_train_time_list:
-        one_start, one_end = one_list
-        one_delta = calTimeDelta(
-            timestamp1=one_start, timestamp2=current_time, format="%H:%M:%S"
-        )
-        delta_dict[one_start] = one_delta
-        if one_delta <= 0:
-            neg_flag = True
-            neg_delta_dict[one_start] = one_delta
-    print("delta_dict: ", delta_dict)
-    if neg_flag:
-        neg_num = len(list(neg_delta_dict.keys()))
-        if neg_num == 1:
-            sorted_list = sorted(delta_dict.items(), key=lambda e: e[1])
-            next_start_time = current_day + " " + sorted_list[0][0]
-        else:
-            sorted_list = sorted(
-                neg_delta_dict.items(), key=lambda e: e[1], reverse=True
-            )
-            next_start_time = current_day + " " + sorted_list[0][0]
-    else:
-        last_day = getFutureDay(current_day, 1, format="%Y-%m-%d")
-        start_list = [one[0] for one in allow_train_time_list]
-        start_list.sort()
-        next_start_time = last_day + " " + start_list[0]
-    print("next_start_time: ", next_start_time)
-    return next_start_time
-
-
-def is_training_time():
-    """
-    检查当前时间是否在允许的训练时间段内
-    """
-    try:
-        with open(taskCfgDir + "task_config.json") as f:
-            allow_train_time_list = json.load(f)["allow_train_time_list"]
-    except:
-        allow_train_time_list = [["01:01:01", "23:59:59"]]
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("current_time: ", current_time)
-    for period in allow_train_time_list:
-        start_time = period[0]
-        end_time = period[1]
-        # 将时间字符串转换为 datetime.time 对象
-        start_time_obj = datetime.strptime(start_time, "%H:%M:%S").time()
-        end_time_obj = datetime.strptime(end_time, "%H:%M:%S").time()
-        # 如果时间段跨午夜
-        if start_time_obj > end_time_obj:
-            # 如果当前时间在午夜之前
-            if current_time >= start_time:
-                return True
-            # 如果当前时间在午夜之后
-            if current_time <= end_time:
-                return True
-        else:
-            # 如果当前时间在时间段内
-            if start_time <= current_time <= end_time:
-                return True
-    return False
 
 
 def save_training_state(model, optimizer, scheduler, epoch, batch_num, ema, save_dir):

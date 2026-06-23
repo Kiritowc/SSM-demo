@@ -1,0 +1,21 @@
+data:
+  profile: ett_h1
+  path: ets/datasets/ETT-small/ETTh1.csv
+  datetime_col: date
+  feature_cols:
+    - HUFL
+    - HULL
+    - MUFL
+    - MULL
+    - LUFL
+    - LULL
+    - OT
+  target_col: OT
+  window_size: 96
+  horizon: 96
+  split_mode: ett_fixed
+  ett_hours_per_month: 720
+  input_mode: features_only
+  scale_target: true
+  metrics_in_normalized_space: true
+  stride: 1

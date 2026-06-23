@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from cv.paths import backbone_bin
+
 from .nexus import (
     BackboneBlueprint,
     EncryptedArtifactSpec,
@@ -72,7 +74,7 @@ SSYL_VARIANT_PROGRAMS = {
             (96, 96, 5, 576, True, "SI", 1, True),
             (96, 128, 5, 576, True, "SI", 1, True),
         ),
-        "artifact": "cv/core/backbone/ssyl/ssyl_a.bin",
+        "artifact": backbone_bin("ssyl", "ssyl_a.bin"),
     },
     "ssyl_b": {
         "feature_taps": (2, 7, 11),
@@ -91,7 +93,7 @@ SSYL_VARIANT_PROGRAMS = {
             (128, 128, 5, 768, True, "SI", 1, True),
             (128, 192, 5, 768, True, "SI", 1, True),
         ),
-        "artifact": "cv/core/backbone/ssyl/ssyl_b.bin",
+        "artifact": backbone_bin("ssyl", "ssyl_b.bin"),
     },
     "ssyl_c": {
         "feature_taps": (3, 9, 14),
@@ -113,7 +115,7 @@ SSYL_VARIANT_PROGRAMS = {
             (128, 128, 5, 768, True, "SI", 1, True),
             (128, 192, 5, 768, True, "SI", 1, True),
         ),
-        "artifact": "cv/core/backbone/ssyl/ssyl_c.bin",
+        "artifact": backbone_bin("ssyl", "ssyl_c.bin"),
     },
 }
 

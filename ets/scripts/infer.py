@@ -3,14 +3,21 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from copy import deepcopy
 from pathlib import Path
 
 import torch
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+_REPO = Path(__file__).resolve().parents[2]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+os.environ.setdefault("SSM_ROOT", str(_REPO))
+
+from ssm.bootstrap import bootstrap_repo
+
+REPO_ROOT = bootstrap_repo(_REPO)
 
 from ets.engine.predictor import Predictor
 from ets.utils.checkpoint import resolve_checkpoint
@@ -27,7 +34,7 @@ def main() -> None:
         raise ValueError("请在 infer.py 底部 parse_args() 设置 --checkpoint 为训练产出的 run 目录")
     ckpt_path = Path(args.checkpoint)
     if not ckpt_path.is_absolute():
-        ckpt_path = PROJECT_ROOT / ckpt_path
+        ckpt_path = REPO_ROOT / ckpt_path
     checkpoint = resolve_checkpoint(ckpt_path, prefer="best")
 
     state = torch.load(checkpoint, map_location="cpu", weights_only=False)
@@ -37,22 +44,22 @@ def main() -> None:
     cfg["train"]["num_workers"] = args.num_workers
 
     if args.merge_data_yaml:
-        config_path = PROJECT_ROOT / args.config
+        config_path = REPO_ROOT / args.config
         yaml_cfg = load_config(
             [config_path],
             overrides=build_infer_overrides(args),
-            project_root=PROJECT_ROOT,
+            project_root=REPO_ROOT,
         )
         cfg["data"] = yaml_cfg["data"]
         logger.info("数据配置来自 %s，模型结构来自 checkpoint", config_path)
 
-    output_path = PROJECT_ROOT / args.output
+    output_path = REPO_ROOT / args.output
 
     predictor = Predictor(
         checkpoint_path=checkpoint,
         cfg=cfg,
         device=args.device,
-        project_root=str(PROJECT_ROOT),
+        project_root=str(REPO_ROOT),
     )
 
     saved_path = predictor.save_predictions_csv(output_path)
@@ -62,23 +69,14 @@ def main() -> None:
 def parse_args():
     import argparse
 
-    parser = argparse.ArgumentParser(description="ETS 批量推理")
-    parser.add_argument(
-        "--config",
-        default="configs/ets/default.yaml",
-        help="仅 merge_data_yaml 时用于覆盖数据段",
-    )
-    parser.add_argument("--checkpoint", default="", help="run 目录或 weights/best.pt，训练后填写")
-    parser.add_argument("--output", default="outputs/predictions.csv", help="预测结果输出 CSV")
-    parser.add_argument("--device", default="cuda", help="推理设备")
-    parser.add_argument("--batch-size", default=64, type=int, help="推理 DataLoader batch")
-    parser.add_argument("--num-workers", default=0, type=int, help="推理 DataLoader workers")
-    parser.add_argument(
-        "--merge-data-yaml",
-        default=False,
-        action=argparse.BooleanOptionalAction,
-        help="是否用 YAML 的 data 段覆盖 checkpoint 中的数据配置",
-    )
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--config", default="ets/configs/default.yaml")
+    parser.add_argument("--checkpoint", default="")
+    parser.add_argument("--output", default="outputs/predictions.csv")
+    parser.add_argument("--device", default="cuda")
+    parser.add_argument("--batch-size", default=64, type=int)
+    parser.add_argument("--num-workers", default=0, type=int)
+    parser.add_argument("--merge-data-yaml", default=False, action=argparse.BooleanOptionalAction)
     return parser.parse_args()
 
 

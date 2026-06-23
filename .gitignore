@@ -1,6 +1,10 @@
-# Artifacts
-artifacts/
-!artifacts/.gitkeep
+# Module artifacts (keep directory markers)
+cv/artifacts/*
+!cv/artifacts/.gitkeep
+ets/artifacts/*
+!ets/artifacts/.gitkeep
+vlm/artifacts/*
+!vlm/artifacts/.gitkeep
 *.gguf
 *.engine
 *.onnx
@@ -8,8 +12,11 @@ artifacts/
 *.pt
 *.pth
 
-# Data images
-data/**/images/
+# Dataset images
+cv/data/**/images/
+
+# Large local datasets (>100MB, keep on device only)
+ets/datasets/scada.txt
 
 # Python
 __pycache__/
@@ -22,9 +29,15 @@ build/
 
 # Logs & outputs
 *.log
-runs/
 outputs/
 exports/
+runs/
+
+# Temp inference outputs
+temp_image.jpg
+detection.jpg
+debug.jpg
+cv.jpg
 
 # IDE
 .idea/
@@ -34,6 +47,3 @@ exports/
 # OS
 .DS_Store
 Thumbs.db
-
-# Local env
-.env

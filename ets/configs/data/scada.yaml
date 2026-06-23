@@ -1,0 +1,41 @@
+data:
+  profile: scada
+  path: ets/datasets/scada.txt
+  csv_sep: ";"
+  csv_decimal: ","
+  encoding: utf-8
+  datetime_col: PCTimeStamp
+  datetime_parse: scada_eu
+  feature_cols:
+    - WTG01_Ambient WindSpeed Avg. (1)
+    - WTG01_Blades PitchAngle Avg. (2)
+    - WTG01_Generator RPM Max. (4)
+    - WTG01_Generator RPM Min. (5)
+    - WTG01_Generator RPM Avg. (6)
+    - WTG01_Generator RPM StdDev (7)
+    - WTG01_Ambient WindSpeed Max. (8)
+    - WTG01_Ambient WindSpeed Min. (9)
+    - WTG01_Ambient WindSpeed StdDev (10)
+    - WTG01_Ambient WindDir Relative Avg. (11)
+    - WTG01_Ambient WindDir Absolute Avg. (12)
+    - WTG01_Ambient Temp. Avg. (13)
+    - WTG01_Ambient WindSpeed Estimated Avg. (14)
+    - WTG01_Grid Production ReactivePower Avg. (18)
+    - WTG01_Blades PitchAngle Min. (19)
+    - WTG01_Blades PitchAngle Max. (20)
+    - WTG01_Blades PitchAngle StdDev (21)
+    - WTG01_Blades BladeA Load (22)
+    - WTG01_Blades BladeB Load (23)
+    - WTG01_Blades BladeC Load (24)
+    - WTG01_Grid Production Power Avg. (3)
+  target_col: WTG01_Grid Production Power Avg. (3)
+  window_size: 24
+  horizon: 1
+  train_ratio: 0.7
+  val_ratio: 0.15
+  fill_method: ffill
+  input_mode: features_only
+  classify:
+    enabled: false
+    num_classes: 3
+    thresholds: [400, 700]

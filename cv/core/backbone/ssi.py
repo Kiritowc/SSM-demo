@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from cv.paths import backbone_bin
+
 from .nexus import (
     BackboneBlueprint,
     EncryptedArtifactSpec,
@@ -16,7 +18,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(2, 4, 2),
         stage_channels=(-1, 24, 36, 72, 144),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_b": BackboneBlueprint(
         identifier="ssi_b",
@@ -24,7 +26,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(3, 6, 3),
         stage_channels=(-1, 24, 36, 72, 144),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_c": BackboneBlueprint(
         identifier="ssi_c",
@@ -32,7 +34,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(2, 4, 2),
         stage_channels=(-1, 24, 48, 96, 192),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_d": BackboneBlueprint(
         identifier="ssi_d",
@@ -40,7 +42,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(3, 6, 3),
         stage_channels=(-1, 24, 48, 96, 192),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_e": BackboneBlueprint(
         identifier="ssi_e",
@@ -48,7 +50,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(4, 8, 4),
         stage_channels=(-1, 24, 48, 96, 192),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_f": BackboneBlueprint(
         identifier="ssi_f",
@@ -56,7 +58,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(4, 8, 4),
         stage_channels=(-1, 24, 72, 144, 288),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_g": BackboneBlueprint(
         identifier="ssi_g",
@@ -64,7 +66,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(4, 8, 4),
         stage_channels=(-1, 24, 96, 192, 384),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_h": BackboneBlueprint(
         identifier="ssi_h",
@@ -72,7 +74,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(4, 8, 4),
         stage_channels=(-1, 24, 116, 232, 464),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_i": BackboneBlueprint(
         identifier="ssi_i",
@@ -80,7 +82,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(4, 8, 4),
         stage_channels=(-1, 24, 176, 352, 704),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
     "ssi_j": BackboneBlueprint(
         identifier="ssi_j",
@@ -88,7 +90,7 @@ SSI_BLUEPRINTS = {
         stage_repeats=(4, 8, 4),
         stage_channels=(-1, 24, 244, 488, 976),
         notes=("shufflenetv2-family", "shared-encrypted-root"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssi/ssi.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssi", "ssi.bin")),
     ),
 }
 

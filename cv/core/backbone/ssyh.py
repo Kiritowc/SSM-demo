@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from cv.paths import backbone_bin
+
 from .nexus import (
     BackboneBlueprint,
     EncryptedArtifactSpec,
@@ -103,7 +105,7 @@ SSYH_BLUEPRINTS = {
         stage_repeats=(1, 2, 2, 1),
         stage_channels=(16, 32, 64, 128, 256, 256),
         notes=("c2f-yoloish", "encrypted-family"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssyh/ssyh_a.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssyh", "ssyh_a.bin")),
     ),
     "ssyh_b": BackboneBlueprint(
         identifier="ssyh_b",
@@ -111,31 +113,7 @@ SSYH_BLUEPRINTS = {
         stage_repeats=(1, 2, 2, 1),
         stage_channels=(32, 64, 128, 256, 512, 512),
         notes=("c2f-yoloish", "encrypted-family"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssyh/ssyh_b.bin"),
-    ),
-    "ssyh_c": BackboneBlueprint(
-        identifier="ssyh_c",
-        family="ssyh",
-        stage_repeats=(2, 4, 4, 2),
-        stage_channels=(48, 96, 192, 384, 576, 576),
-        notes=("c2f-yoloish", "encrypted-family"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssyh/ssyh_c.bin"),
-    ),
-    "ssyh_d": BackboneBlueprint(
-        identifier="ssyh_d",
-        family="ssyh",
-        stage_repeats=(3, 6, 6, 3),
-        stage_channels=(64, 128, 256, 512, 512, 512),
-        notes=("c2f-yoloish", "encrypted-family"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssyh/ssyh_d.bin"),
-    ),
-    "ssyh_e": BackboneBlueprint(
-        identifier="ssyh_e",
-        family="ssyh",
-        stage_repeats=(3, 6, 6, 3),
-        stage_channels=(80, 160, 320, 640, 640, 640),
-        notes=("c2f-yoloish", "encrypted-family"),
-        artifact=EncryptedArtifactSpec(weight_path="cv/core/backbone/ssyh/ssyh_e.bin"),
+        artifact=EncryptedArtifactSpec(weight_path=backbone_bin("ssyh", "ssyh_b.bin")),
     ),
 }
 

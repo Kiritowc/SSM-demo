@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-FORECAST_MONITORS = ("val_loss", "val_rmse", "val_mae")
+FORECAST_MONITORS = ("val_loss", "val_mse", "val_rmse", "val_mae")
 CLASSIFY_MONITORS = ("val_loss", "val_accuracy", "val_f1")
 MAX_MONITORS = ("val_accuracy", "val_f1")
 
@@ -63,6 +63,24 @@ def build_train_overrides(args) -> list[str]:
         overrides.append(f"train.resume={args.resume}")
     if getattr(args, "scheduler", ""):
         overrides.append(f"train.scheduler={args.scheduler}")
+    if getattr(args, "num_channels", ""):
+        overrides.append(f"model.num_channels={args.num_channels}")
+    if getattr(args, "dilations", ""):
+        overrides.append(f"model.dilations={args.dilations}")
+    if getattr(args, "encoder_hidden_size", None) is not None:
+        overrides.append(f"model.encoder_hidden_size={args.encoder_hidden_size}")
+    if getattr(args, "decoder_hidden_size", None) is not None:
+        overrides.append(f"model.decoder_hidden_size={args.decoder_hidden_size}")
+    if getattr(args, "decoder_layers", None) is not None:
+        overrides.append(f"model.decoder_layers={args.decoder_layers}")
+    if getattr(args, "log_dir", ""):
+        overrides.append(f"train.log_dir={args.log_dir}")
+    if getattr(args, "input_mode", None):
+        overrides.append(f"data.input_mode={args.input_mode}")
+    if getattr(args, "kernel_size", None):
+        overrides.append(f"model.kernel_size={args.kernel_size}")
+    if getattr(args, "no_visualization", False):
+        overrides.append("train.visualization.enabled=false")
     return overrides
 
 

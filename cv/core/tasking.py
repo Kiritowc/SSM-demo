@@ -74,7 +74,7 @@ class TaskTopologyCompiler:
             zerostart=payload.get("zerostart", False),
         )
         schedule = TaskScheduleSpec(
-            allow_train_time_list=payload["allow_train_time_list"]
+            allow_train_time_list=payload.get("allow_train_time_list", [])
         )
         extras = {
             key: value

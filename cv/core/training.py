@@ -1,24 +1,25 @@
 import argparse
+import copy
 import json
 import math
 import os
 import random
 import shutil
-import time
 from dataclasses import dataclass
 from datetime import datetime
 
+import yaml
 from tqdm import tqdm
 
-from cv.cfg import taskCfgDir
+from cv.cfg import EVENT_STREAM, device, task_config, taskCfgDir, trainLogDir
+from cv.core.assembly import DetectorPlatformAssembly
+from cv.core.backbone.mi import MoEn
+from cv.core.events import EventBus, JsonlEventSink
+from cv.core.runtime import TrainingRuntimeContext
+from cv.paths import RUNS_DIR, RUNTIME_YAML
 from cv.core.registry import NamedComponentRegistry
-from cv.export import convert_and_save_model
-from cv.utils.tool import (
-    calculate_next_training_time,
-    is_training_time,
-    load_training_state,
-    save_training_state,
-)
+from cv.core.exporting import convert_and_save_model
+from cv.utils.tool import load_training_state, save_training_state
 
 
 warmup_policy_registry = NamedComponentRegistry("warmup-policy")
@@ -138,71 +139,8 @@ class EvaluationCheckpointRelay:
 class TemporalSleepPolicy:
     def __init__(self, trainer):
         self.trainer = trainer
-        self.ledger = trainer.status_ledger
 
     def maybe_suspend(self, cursor: TrainingCursor):
-        if is_training_time():
-            return cursor
-        trainer = self.trainer
-        print("超出允许训练的时间段,停止训练,存储当前训练状态信息......")
-        save_training_state(
-            trainer.model,
-            trainer.optimizer,
-            trainer.scheduler,
-            cursor.epoch + 1,
-            cursor.batch_num,
-            trainer.ema,
-            trainer.saveDir,
-        )
-        trainer.event_bus.emit(
-            "training",
-            "sleep-enter",
-            {
-                "model_name": trainer.model_name,
-                "epoch": cursor.epoch,
-                "batch_num": cursor.batch_num,
-            },
-        )
-        self.ledger.patch(status="sleeping")
-        print("已经停止训练，任务状态已修改......")
-        allow_train_time_list = self.ledger.load().get(
-            "allow_train_time_list", [["01:01:01", "23:59:59"]]
-        )
-        next_start_time = calculate_next_training_time(allow_train_time_list)
-        print("下次自动执行起点时间: ", next_start_time)
-        next_start_time = datetime.strptime(next_start_time, "%Y-%m-%d %H:%M:%S")
-        time_until_next = (next_start_time - datetime.now()).total_seconds()
-        print(
-            f"Next training will start at {next_start_time.strftime('%Y-%m-%d %H:%M:%S')}. Waiting..."
-        )
-        print("执行自动休眠操作,休眠时长: ", time_until_next)
-        time.sleep(max(time_until_next, 0))
-        trainer.event_bus.emit(
-            "training",
-            "sleep-exit",
-            {
-                "model_name": trainer.model_name,
-                "resume_at": next_start_time.strftime("%Y-%m-%d %H:%M:%S"),
-            },
-        )
-        self.ledger.patch(status="training")
-        print("训练继续进行，任务状态已修改......")
-        (
-            trainer.model,
-            trainer.optimizer,
-            trainer.scheduler,
-            trainer.ema,
-            cursor.start_epoch,
-            cursor.batch_num,
-        ) = load_training_state(
-            trainer.model,
-            trainer.optimizer,
-            trainer.scheduler,
-            trainer.ema,
-            trainer.saveDir,
-        )
-        print(f"Resuming training from epoch {cursor.start_epoch}")
-        print("Now batch_num is: ", cursor.batch_num)
         return cursor
 
 
@@ -310,6 +248,22 @@ class DetectorTrainingOrchestrator:
             trainer.ema,
             trainer.saveDir,
         )
+        if start_epoch >= total_epoch:
+            print(
+                "Checkpoint epoch %d >= target %d; discarding checkpoint, training from epoch 0"
+                % (start_epoch, total_epoch)
+            )
+            state_path = os.path.join(trainer.saveDir.rstrip(os.sep), "training_state.bin")
+            if os.path.exists(state_path):
+                os.remove(state_path)
+            bundle = DetectorPlatformAssembly().build(trainer.runtime)
+            trainer.model = bundle.model
+            trainer.optimizer = bundle.optimizer
+            trainer.scheduler = bundle.scheduler
+            trainer.ema = bundle.ema
+            trainer.ema.register()
+            start_epoch = 0
+            batch_num = 0
         if start_epoch == 0:
             print(f"Training from epoch {start_epoch} to epoch {total_epoch}")
         else:
@@ -402,49 +356,121 @@ class DetectorTrainingOrchestrator:
         )
 
 
-class TrainingLaunchWindow:
-    def __init__(self, configfile):
-        self.configfile = configfile
-
-    def await_window(self):
-        while True:
-            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            print(f"Current time: {current_time}")
-            with open(self.configfile, "r", encoding="utf-8") as file:
-                configs = json.load(file)
-            if self._is_in_window(configs["allow_train_time_list"]):
-                print("当前启动时间在允许训练的时间段内,立即开始训练......")
-                return configs
-            print("当前不在允许训练的时间段内, 进入等待期, 待至允许训练时段内自动开启训练任务...")
-            next_start_time = calculate_next_training_time(
-                configs["allow_train_time_list"]
-            )
-            if next_start_time:
-                next_start_time = datetime.strptime(
-                    next_start_time, "%Y-%m-%d %H:%M:%S"
-                )
-                time_until_next = (next_start_time - datetime.now()).total_seconds()
-                print(
-                    f"下一个允许训练的时间点为: {next_start_time.strftime('%Y-%m-%d %H:%M:%S')}. 当前进入等待期..."
-                )
-                time.sleep(max(time_until_next, 0))
-            else:
-                time.sleep(600)
-
-    @staticmethod
-    def _is_in_window(allow_train_time_list):
-        current_time = datetime.now().strftime("%H:%M:%S")
-        for start_time, end_time in allow_train_time_list:
-            if start_time > end_time:
-                if current_time >= start_time or current_time <= end_time:
-                    return True
-                continue
-            if start_time <= current_time <= end_time:
-                return True
-        return False
-
-
 warmup_policy_registry.register("polynomial-warmup", PolynomialWarmupRegulator)
 checkpoint_policy_registry.register("evaluation-checkpoint", EvaluationCheckpointRelay)
 time_window_policy_registry.register("temporal-sleep", TemporalSleepPolicy)
 finalizer_policy_registry.register("encrypted-artifact-finalizer", EncryptedArtifactFinalizer)
+
+
+class DetectorTrainer:
+    """PyTorch detector training entry — ONNX runtime uses cv.inference.ssDet."""
+
+    def __init__(
+        self,
+        yaml=RUNTIME_YAML,
+        weight=None,
+        model=None,
+        ins=None,
+        ous=None,
+        aug=True,
+        method=1,
+        debug=False,
+        epochs=9,
+        delta=10,
+        spp="spp",
+        dir=RUNS_DIR,
+        save_dir=None,
+    ):
+        self.yaml = yaml
+        self.weight = weight
+        self.model = model
+        self.ins = ins
+        self.ous = ous
+        self.aug = aug
+        self.method = method
+        self.debug = debug
+        self.epochs = epochs
+        self.delta = delta
+        self.spp = spp
+        self.dir = dir
+        self.model_name = model
+        self.save_dir_override = save_dir
+        assert os.path.exists(self.yaml), "请指定正确的配置文件路径"
+
+        self.pid = os.getpid()
+        self.status_ledger = TaskStatusLedger()
+        self._persist_process_identity()
+        self.saveDir = self._resolve_save_dir()
+        self.vault = MoEn()
+
+        self.runtime = TrainingRuntimeContext.from_legacy_opt(
+            self, self.yaml, device, self.saveDir
+        )
+        self.cfg = self.runtime.cfg
+        self.train_log = self.runtime.paths.train_log_path
+        self.event_bus = EventBus(
+            [
+                JsonlEventSink(EVENT_STREAM),
+                JsonlEventSink(os.path.join(self.saveDir, "telemetry.jsonl")),
+            ]
+        )
+
+        bundle = DetectorPlatformAssembly().build(self.runtime)
+        self.model = bundle.model
+        self.optimizer = bundle.optimizer
+        self.scheduler = bundle.scheduler
+        self.ema = bundle.ema
+        self.loss_function = bundle.loss_function
+        self.evaluation = bundle.evaluation
+        self.train_dataloader = bundle.train_dataloader
+        self.val_dataloader = bundle.val_dataloader
+
+        self._bootstrap_task_ledger()
+        self.event_bus.emit(
+            "training",
+            "initialized",
+            {
+                "model_name": self.model_name,
+                "save_dir": self.saveDir,
+                "yaml": self.yaml,
+                "epochs": self.epochs,
+                "batch_size": self.cfg.batch_size,
+            },
+        )
+        self.orchestrator = DetectorTrainingOrchestrator(self)
+
+    def _persist_process_identity(self):
+        print(f"Current Process PID: {self.pid}")
+        with open(os.path.join(trainLogDir, "task_pid.txt"), "w", encoding="utf-8") as file:
+            file.write(str(self.pid))
+
+    def _resolve_save_dir(self):
+        if self.save_dir_override:
+            save_dir = os.path.abspath(os.path.expanduser(str(self.save_dir_override)))
+            os.makedirs(save_dir, exist_ok=True)
+            return save_dir if save_dir.endswith(os.sep) else save_dir + os.sep
+        save_dir = os.path.join(self.dir, self.model_name)
+        os.makedirs(save_dir, exist_ok=True)
+        return save_dir if save_dir.endswith(os.sep) else save_dir + os.sep
+
+    def _bootstrap_task_ledger(self):
+        try:
+            payload = self.status_ledger.load()
+            if not payload:
+                payload = copy.deepcopy(task_config)
+                payload["model_name"] = self.model_name
+                payload["runsDir"] = self.dir
+                with open(self.cfg.names, "r", encoding="utf-8") as file:
+                    payload["obj_labels"] = [
+                        one.strip() for one in file.readlines() if one.strip()
+                    ]
+                with open(self.yaml, "r", encoding="utf-8") as file:
+                    payload["cfg_yaml"] = yaml.safe_load(file)
+            payload["pid"] = str(self.pid)
+            payload["status"] = "training"
+            self.status_ledger.patch(**payload)
+        except Exception as exc:
+            print("读取训练任务PID修改训练任务配置出错: ", exc)
+
+    def train(self):
+        return self.orchestrator.run()

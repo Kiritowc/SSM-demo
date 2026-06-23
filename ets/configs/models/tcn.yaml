@@ -1,0 +1,12 @@
+model:
+  name: tcn
+  kernel_size: 2
+  dilations:
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
+  encoder_hidden_size: 128
+  decoder_hidden_size: 128
+  decoder_layers: 2

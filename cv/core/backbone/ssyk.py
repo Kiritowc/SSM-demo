@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from cv.paths import backbone_bin
+
 from .nexus import (
     BackboneBlueprint,
     EncryptedArtifactSpec,
@@ -195,7 +197,7 @@ SSYK_VARIANT_PROGRAMS = {
             ("sppf", (256, 256, 5)),
             ("c2psa", (256, 256, 1)),
         ),
-        "artifact": "cv/core/backbone/ssyk/ssyk_a.bin",
+        "artifact": backbone_bin("ssyk", "ssyk_a.bin"),
     },
     "ssyk_b": {
         "feature_taps": (4, 6, 10),
@@ -212,7 +214,7 @@ SSYK_VARIANT_PROGRAMS = {
             ("sppf", (512, 512, 5)),
             ("c2psa", (512, 512, 1)),
         ),
-        "artifact": "cv/core/backbone/ssyk/ssyk_b.bin",
+        "artifact": backbone_bin("ssyk", "ssyk_b.bin"),
     },
 }
 

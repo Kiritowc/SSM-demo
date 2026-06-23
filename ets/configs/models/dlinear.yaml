@@ -1,0 +1,4 @@
+model:
+  name: dlinear
+  individual: false
+  decomp_kernel: 25

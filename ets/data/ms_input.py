@@ -19,14 +19,6 @@ def resolve_num_features(cfg: dict[str, Any], num_feature_cols: int) -> int:
     return num_feature_cols
 
 
-def resolve_target_channel(cfg: dict[str, Any], num_feature_cols: int) -> int:
-    """Index of the supervised target channel inside MS model inputs."""
-    idx = int(cfg.get("data", {}).get("target_channel", -1))
-    if idx < 0:
-        return num_feature_cols
-    return idx
-
-
 def build_ms_inputs(features: np.ndarray, targets: np.ndarray) -> np.ndarray:
     """
     Concatenate scaled feature matrix with target history.

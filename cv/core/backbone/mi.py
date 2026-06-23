@@ -9,8 +9,9 @@ from cryptography.fernet import Fernet
 
 
 def _repo_root() -> Path:
-    # cv/core/backbone/mi.py -> parents[2] == repository root (contains cv/)
-    return Path(__file__).resolve().parents[2]
+    from ssm.paths import repo_root
+
+    return repo_root()
 
 
 

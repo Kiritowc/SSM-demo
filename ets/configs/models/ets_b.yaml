@@ -1,0 +1,9 @@
+model:
+  name: ets_b
+  num_channels:
+  - 24
+  - 24
+  kernel_size: 3
+  dropout: 0.1
+  decomp_kernel: 9
+  use_weight_norm: false

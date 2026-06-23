@@ -1,38 +1,36 @@
-import json
+"""CV runtime configuration — lazy-initialized from cv/configs/default.yaml."""
+
+from __future__ import annotations
+
 import os
 from pathlib import Path
 
 import torch
 import yaml
 
-from ssm_common.config import load_yaml
-from ssm_common.paths import get_paths, repo_root
-
+from ssm.config import load_yaml
+from ssm.paths import get_paths, repo_root
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-_paths = get_paths()
-_paths.ensure_runtime_dirs()
-
-ROOT = repo_root()
-CV_DEFAULT = load_yaml(_paths.configs / "cv" / "default.yaml")
+_STATE: dict = {}
+_initialized = False
 
 
-def _build_task_config() -> dict:
-    cfg = CV_DEFAULT
+def _build_task_config(cfg: dict, paths, root: Path) -> dict:
+    runs_rel = cfg.get("runs_dir", "cv/artifacts/runs")
     return {
-        "allow_train_time_list": cfg.get("allow_train_time_list", []),
         "model_name": cfg["model_name"],
         "obj_labels": cfg["obj_labels"],
-        "runsDir": str(_paths.artifacts_cv / "runs"),
-        "save_dir": str(ROOT / cfg["save_dir"]),
+        "runsDir": str(root / runs_rel),
+        "save_dir": str(root / cfg["save_dir"]),
         "zerostart": cfg.get("zerostart", False),
-        "pretrained_weight": str(ROOT / cfg["pretrained_weight"]),
+        "pretrained_weight": str(root / cfg["pretrained_weight"]),
         "cfg_yaml": {
             "DATASET": {
-                "TRAIN": str(ROOT / cfg["dataset"]["train"]),
-                "VAL": str(ROOT / cfg["dataset"]["val"]),
-                "NAMES": str(ROOT / cfg["dataset"]["names"]),
+                "TRAIN": str(root / cfg["dataset"]["train"]),
+                "VAL": str(root / cfg["dataset"]["val"]),
+                "NAMES": str(root / cfg["dataset"]["names"]),
             },
             "MODEL": {
                 "NC": cfg["model"]["nc"],
@@ -51,9 +49,7 @@ def _build_task_config() -> dict:
     }
 
 
-def _bootstrap_runtime_config(cfg_yaml: dict, labels: list) -> None:
-    """Materialize runtime YAML consumed by LoadYaml and training."""
-    runtime_dir = _paths.artifacts_cv / "runtime"
+def _bootstrap_runtime_config(cfg_yaml: dict, labels: list, runtime_dir: Path) -> None:
     runtime_dir.mkdir(parents=True, exist_ok=True)
     self_yaml = runtime_dir / "self.yaml"
     self_names = runtime_dir / "self.names"
@@ -63,21 +59,73 @@ def _bootstrap_runtime_config(cfg_yaml: dict, labels: list) -> None:
         f.write("\n".join(label.strip() for label in labels))
 
 
-task_config = _build_task_config()
-_bootstrap_runtime_config(task_config["cfg_yaml"], task_config["obj_labels"])
+def ensure_cv_runtime() -> None:
+    """Create artifact dirs and materialize runtime self.yaml / self.names."""
+    global _initialized
+    if _initialized:
+        return
 
-taskCfgDir = str(_paths.artifacts_cv / "runs" / "taskCfg")
-taskSeqDir = str(_paths.artifacts_cv / "runs" / "tasks")
-trainLogDir = str(_paths.artifacts_cv / "runs" / "trainLog")
-eventLogDir = str(_paths.artifacts_cv / "runs" / "events")
-configDir = str(_paths.artifacts_cv / "runtime")
+    paths = get_paths()
+    paths.ensure_runtime_dirs()
+    root = repo_root()
+    cv_default = load_yaml(paths.configs_cv / "default.yaml")
+    task_config = _build_task_config(cv_default, paths, root)
 
-for d in (taskCfgDir, taskSeqDir, trainLogDir, eventLogDir, configDir):
-    os.makedirs(d, exist_ok=True)
+    runtime_dir = paths.artifacts_cv / "runtime"
+    _bootstrap_runtime_config(task_config["cfg_yaml"], task_config["obj_labels"], runtime_dir)
 
-TASK_FILE = os.path.join(taskCfgDir, "task_config.json")
-TRAIN_LOG = os.path.join(trainLogDir, "train.log")
-TASK_HISTORY = os.path.join(trainLogDir, "tasks_history.log")
-EVENT_STREAM = os.path.join(eventLogDir, "events.jsonl")
-RUNTIME_YAML = os.path.join(configDir, "self.yaml")
-RUNTIME_NAMES = os.path.join(configDir, "self.names")
+    runs = paths.artifacts_cv / "runs"
+    task_cfg_dir = runs / "taskCfg"
+    task_seq_dir = runs / "tasks"
+    train_log_dir = runs / "trainLog"
+    event_log_dir = runs / "events"
+
+    for d in (task_cfg_dir, task_seq_dir, train_log_dir, event_log_dir, runtime_dir):
+        os.makedirs(d, exist_ok=True)
+
+    _STATE.update(
+        {
+            "ROOT": root,
+            "task_config": task_config,
+            "DEFAULT_RUNS_DIR": str(runs),
+            "taskCfgDir": str(task_cfg_dir) + os.sep,
+            "taskSeqDir": str(task_seq_dir) + os.sep,
+            "trainLogDir": str(train_log_dir) + os.sep,
+            "eventLogDir": str(event_log_dir) + os.sep,
+            "configDir": str(runtime_dir) + os.sep,
+            "TASK_FILE": os.path.join(str(task_cfg_dir), "task_config.json"),
+            "TRAIN_LOG": os.path.join(str(train_log_dir), "train.log"),
+            "TASK_HISTORY": os.path.join(str(train_log_dir), "tasks_history.log"),
+            "EVENT_STREAM": os.path.join(str(event_log_dir), "events.jsonl"),
+            "RUNTIME_YAML": str(runtime_dir / "self.yaml"),
+            "RUNTIME_NAMES": str(runtime_dir / "self.names"),
+        }
+    )
+    _initialized = True
+
+
+def __getattr__(name: str):
+    if name == "device":
+        return device
+    ensure_cv_runtime()
+    if name in _STATE:
+        return _STATE[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+__all__ = [
+    "device",
+    "ensure_cv_runtime",
+    "task_config",
+    "DEFAULT_RUNS_DIR",
+    "taskCfgDir",
+    "taskSeqDir",
+    "trainLogDir",
+    "configDir",
+    "TASK_FILE",
+    "TRAIN_LOG",
+    "TASK_HISTORY",
+    "EVENT_STREAM",
+    "RUNTIME_YAML",
+    "RUNTIME_NAMES",
+]

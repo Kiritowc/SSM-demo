@@ -1,16 +1,9 @@
 root: ${SSM_ROOT}
 
-paths:
-  artifacts_cv: ${SSM_ROOT}/artifacts/cv
-  artifacts_ets: ${SSM_ROOT}/artifacts/ets
-  artifacts_vlm: ${SSM_ROOT}/artifacts/vlm
-  data_cv: ${SSM_ROOT}/data/cv
-  data_ets: ${SSM_ROOT}/data/ets
-
 binaries:
-  llama_server: ${LLAMA_SERVER:-/home/sunshink/llama.cpp/build/bin/llama-server}
+  llama_server: ${LLAMA_SERVER:-llama-server}
   trtexec: ${TRTEXEC:-/usr/src/tensorrt/bin/trtexec}
-  python: ${SSM_PYTHON:-/home/sunshink/miniconda3/envs/ssdet/bin/python}
+  python: ${SSM_PYTHON:-python3}
 
 services:
   vlm:
