@@ -1,6 +1,6 @@
 # Module artifacts (keep directory markers)
-cv/artifacts/*
-!cv/artifacts/.gitkeep
+ssdet/artifacts/*
+!ssdet/artifacts/.gitkeep
 ets/artifacts/*
 !ets/artifacts/.gitkeep
 vlm/artifacts/*
@@ -13,7 +13,7 @@ vlm/artifacts/*
 *.pth
 
 # Dataset images
-cv/data/**/images/
+ssdet/data/**/images/
 
 # Large local datasets (>100MB, keep on device only)
 ets/datasets/scada.txt
@@ -37,13 +37,16 @@ runs/
 temp_image.jpg
 detection.jpg
 debug.jpg
-cv.jpg
+ssdet.jpg
 
-# IDE
+# IDE (keep shared interpreter path)
+.vscode/*
+!.vscode/settings.json
 .idea/
-.vscode/
 .cursor/
 
 # OS
 .DS_Store
 Thumbs.db
+ets/datasets/ssa/*.csv
+ets/datasets/ssa/manifest*.json

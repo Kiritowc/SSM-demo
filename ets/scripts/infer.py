@@ -69,8 +69,9 @@ def main() -> None:
 def parse_args():
     import argparse
 
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--config", default="ets/configs/default.yaml")
+    from ets.utils.argparse_compat import ensure_boolean_optional_action
+
+    ensure_boolean_optional_action()
     parser.add_argument("--checkpoint", default="")
     parser.add_argument("--output", default="outputs/predictions.csv")
     parser.add_argument("--device", default="cuda")

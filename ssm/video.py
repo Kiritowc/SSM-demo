@@ -1,4 +1,4 @@
-"""Video + web demo server lifecycle (CV + VLM integration)."""
+"""Video + web demo server lifecycle (SSDet + VLM integration)."""
 
 from __future__ import annotations
 

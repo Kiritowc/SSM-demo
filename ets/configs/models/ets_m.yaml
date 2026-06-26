@@ -15,4 +15,4 @@ train:
   early_stopping:
     enabled: false
   visualization:
-    enabled: false
+    enabled: true

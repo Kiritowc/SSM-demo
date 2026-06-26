@@ -1,9 +1,5 @@
-root: ${SSM_ROOT}
-
 binaries:
-  llama_server: ${LLAMA_SERVER:-llama-server}
   trtexec: ${TRTEXEC:-/usr/src/tensorrt/bin/trtexec}
-  python: ${SSM_PYTHON:-python3}
 
 services:
   vlm:

@@ -1,5 +1,6 @@
 from ets.models.base import BaseForecastModel, BaseSequenceModel
 from ets.models.dlinear import DLinearModel
+from ets.models.ets_a import EtsAModel
 from ets.models.ets_b import EtsBModel
 from ets.models.ets_c import EtsCModel
 from ets.models.gru import GRUModel
@@ -11,6 +12,7 @@ __all__ = [
     "BaseForecastModel",
     "BaseSequenceModel",
     "DLinearModel",
+    "EtsAModel",
     "EtsBModel",
     "EtsCModel",
     "GRUModel",

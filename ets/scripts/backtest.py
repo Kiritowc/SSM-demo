@@ -64,11 +64,14 @@ def main() -> None:
 def parse_args():
     import argparse
 
+    from ets.utils.argparse_compat import ensure_boolean_optional_action
+
+    ensure_boolean_optional_action()
     models = sorted(MODEL_REGISTRY.keys())
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--config", default="ets/configs/default.yaml")
     parser.add_argument("--output", default="outputs/backtest.json")
-    parser.add_argument("--data-profile", default="air_quality")
+    parser.add_argument("--data-profile", default="ssa_hourly")
     parser.add_argument("--model", choices=models, default="ets_b")
     parser.add_argument("--hidden-size", default=128, type=int)
     parser.add_argument("--num-layers", default=2, type=int)

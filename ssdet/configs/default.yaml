@@ -1,0 +1,25 @@
+model_name: ssg_a
+obj_labels: [robot_toy]
+runs_dir: ssdet/artifacts/runs
+save_dir: ssdet/artifacts/runs/robot_toy
+zerostart: false
+pretrained_weight: ssdet/artifacts/runs/robot_toy/best.bin
+dataset:
+  train: ssdet/data/robot_toy/train.txt
+  val: ssdet/data/robot_toy/val.txt
+  names: ssdet/data/robot_toy/classes.txt
+model:
+  nc: 1
+  input_width: 416
+  input_height: 416
+train:
+  lr: 0.001
+  thresh: 0.25
+  warmup: true
+  batch_size: 16
+  end_epoch: 100
+  milestones: [70, 85, 95]
+deploy:
+  engine: ssdet/artifacts/engines/robot_toy.engine
+  onnx: ssdet/artifacts/engines/robot_toy.onnx
+  marker: ssdet/artifacts/engines/.robot_toy_ready

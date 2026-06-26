@@ -25,7 +25,7 @@ MODEL_REGISTRY: dict[str, ModelType] = {
     "ets_t": TCNModel,
     "dlinear": DLinearModel,
     "ets_a": EtsAModel,
-    "ets_m": EtsAModel,
+    "ets_m": EtsCModel,
     "ets_b": EtsBModel,
     "ets_c": EtsCModel,
     "ets_h": EtsHModel,

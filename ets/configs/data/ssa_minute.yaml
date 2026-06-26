@@ -1,0 +1,27 @@
+data:
+  profile: ssa_minute
+  path: ets/datasets/ssa/minute_24h.csv
+  datetime_col: time
+  feature_cols:
+    - s08001
+    - s08002
+    - s08003
+    - s04001
+    - s06001
+    - s06002
+    - s04003
+    - s04004
+    - a01001
+    - a01002
+    - a01006
+    - a01007
+    - a01008
+    - a99943
+    - uv0002
+  target_col: s08001
+  window_size: 60
+  horizon: 1
+  train_ratio: 0.7
+  val_ratio: 0.15
+  fill_method: ffill
+  input_mode: features_only

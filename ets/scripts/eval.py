@@ -30,8 +30,9 @@ from ets.utils.script_overrides import build_infer_overrides
 def parse_args():
     import argparse
 
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--checkpoint", required=True)
+    from ets.utils.argparse_compat import ensure_boolean_optional_action
+
+    ensure_boolean_optional_action()
     parser.add_argument("--split", choices=["val", "test", "both"], default="both")
     parser.add_argument("--config", default="ets/configs/default.yaml")
     parser.add_argument("--device", default="cuda")

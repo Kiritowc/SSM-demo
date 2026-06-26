@@ -18,13 +18,13 @@ const historyMenu = document.querySelector("#history-menu");
 const newChatBtn = document.querySelector("#new-chat-btn");
 const sidebarToggleBtn = document.querySelector("#sidebar-toggle");
 const pageEl = document.querySelector(".page");
-const cvModelButton = document.querySelector("#cv-model-button");
-const cvModelLabel = document.querySelector("#cv-model-label");
-const cvModelMenu = document.querySelector("#cv-model-menu");
+const ssdetModelButton = document.querySelector("#ssdet-model-button");
+const ssdetModelLabel = document.querySelector("#ssdet-model-label");
+const ssdetModelMenu = document.querySelector("#ssdet-model-menu");
 
 const SIDEBAR_KEY = "ssdet.sidebar.collapsed";
-const CV_MODEL_KEY = "ssdet.cv_model.v3";
-const CV_MODELS = {
+const SSDET_MODEL_KEY = "ssdet.ssdet_model.v3";
+const SSDET_MODELS = {
   none: "默认",
   ssg_a_robot_toy: "robot_toy",
 };
@@ -44,10 +44,10 @@ function setSidebarCollapsed(collapsed) {
   }
 }
 
-function loadCvModel() {
+function loadSsdetModel() {
   try {
-    const stored = localStorage.getItem(CV_MODEL_KEY);
-    if (stored && Object.prototype.hasOwnProperty.call(CV_MODELS, stored)) {
+    const stored = localStorage.getItem(SSDET_MODEL_KEY);
+    if (stored && Object.prototype.hasOwnProperty.call(SSDET_MODELS, stored)) {
       return stored;
     }
   } catch (_) {
@@ -56,37 +56,37 @@ function loadCvModel() {
   return "none";
 }
 
-function saveCvModel(model) {
+function saveSsdetModel(model) {
   try {
-    localStorage.setItem(CV_MODEL_KEY, model);
+    localStorage.setItem(SSDET_MODEL_KEY, model);
   } catch (_) {
     /* noop */
   }
 }
 
-function renderCvModel() {
-  cvModelLabel.textContent = CV_MODELS[activeCvModel] || activeCvModel;
-  for (const button of cvModelMenu.querySelectorAll("button[data-cv-model]")) {
-    button.classList.toggle("active", button.dataset.cvModel === activeCvModel);
+function renderSsdetModel() {
+  ssdetModelLabel.textContent = SSDET_MODELS[activeSsdetModel] || activeSsdetModel;
+  for (const button of ssdetModelMenu.querySelectorAll("button[data-ssdet-model]")) {
+    button.classList.toggle("active", button.dataset.ssdetModel === activeSsdetModel);
   }
 }
 
-function openCvModelMenu() {
+function openSsdetModelMenu() {
   closeMenu();
-  const rect = cvModelButton.getBoundingClientRect();
-  cvModelMenu.hidden = false;
-  cvModelButton.setAttribute("aria-expanded", "true");
-  cvModelMenu.style.top = `${rect.top}px`;
-  cvModelMenu.style.left = `${Math.min(rect.right + 12, window.innerWidth - 236)}px`;
+  const rect = ssdetModelButton.getBoundingClientRect();
+  ssdetModelMenu.hidden = false;
+  ssdetModelButton.setAttribute("aria-expanded", "true");
+  ssdetModelMenu.style.top = `${rect.top}px`;
+  ssdetModelMenu.style.left = `${Math.min(rect.right + 12, window.innerWidth - 236)}px`;
 }
 
-function closeCvModelMenu() {
-  cvModelMenu.hidden = true;
-  cvModelButton.setAttribute("aria-expanded", "false");
+function closeSsdetModelMenu() {
+  ssdetModelMenu.hidden = true;
+  ssdetModelButton.setAttribute("aria-expanded", "false");
 }
 
-async function syncCvModel(model) {
-  await fetch("/cv_model", {
+async function syncSsdetModel(model) {
+  await fetch("/ssdet_model", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ model }),
@@ -98,25 +98,25 @@ sidebarToggleBtn.addEventListener("click", () => {
   setSidebarCollapsed(!pageEl.classList.contains("sidebar-collapsed"));
 });
 
-cvModelButton.addEventListener("click", (event) => {
+ssdetModelButton.addEventListener("click", (event) => {
   event.stopPropagation();
-  if (cvModelMenu.hidden) {
-    openCvModelMenu();
+  if (ssdetModelMenu.hidden) {
+    openSsdetModelMenu();
   } else {
-    closeCvModelMenu();
+    closeSsdetModelMenu();
   }
 });
 
-cvModelMenu.addEventListener("click", async (event) => {
-  const button = event.target.closest("button[data-cv-model]");
+ssdetModelMenu.addEventListener("click", async (event) => {
+  const button = event.target.closest("button[data-ssdet-model]");
   if (!button) return;
-  const nextModel = button.dataset.cvModel;
-  activeCvModel = nextModel;
-  saveCvModel(nextModel);
-  renderCvModel();
-  closeCvModelMenu();
+  const nextModel = button.dataset.ssdetModel;
+  activeSsdetModel = nextModel;
+  saveSsdetModel(nextModel);
+  renderSsdetModel();
+  closeSsdetModelMenu();
   try {
-    await syncCvModel(nextModel);
+    await syncSsdetModel(nextModel);
     refreshStats();
   } catch (error) {
     setCameraStatus("切换失败", "error");
@@ -131,7 +131,7 @@ let conversations = loadConversations();
 let activeId = null;
 let menuTargetId = null;
 let activeRequest = null;
-let activeCvModel = loadCvModel();
+let activeSsdetModel = loadSsdetModel();
 
 function loadConversations() {
   try {
@@ -296,8 +296,8 @@ historyMenu.addEventListener("click", (event) => {
 });
 
 document.addEventListener("click", (event) => {
-  if (!cvModelMenu.hidden && !event.target.closest("#cv-model-menu") && !event.target.closest("#cv-model-button")) {
-    closeCvModelMenu();
+  if (!ssdetModelMenu.hidden && !event.target.closest("#ssdet-model-menu") && !event.target.closest("#ssdet-model-button")) {
+    closeSsdetModelMenu();
   }
   if (historyMenu.hidden) return;
   if (event.target.closest("#history-menu")) return;
@@ -307,11 +307,11 @@ document.addEventListener("click", (event) => {
 
 window.addEventListener("resize", () => {
   closeMenu();
-  closeCvModelMenu();
+  closeSsdetModelMenu();
 });
 window.addEventListener("scroll", () => {
   closeMenu();
-  closeCvModelMenu();
+  closeSsdetModelMenu();
 }, true);
 
 /* ---------- 对话渲染 ---------- */
@@ -385,7 +385,7 @@ function setCameraStatus(text, state) {
   cameraStatus.className = `status-pill ${state || ""}`.trim();
 }
 
-let lastCvPayload = null;
+let lastSsdetPayload = null;
 
 function drawDetectionOverlay() {
   if (!cameraOverlay || !streamFrame) return;
@@ -402,10 +402,10 @@ function drawDetectionOverlay() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, cw, ch);
 
-  if (!lastCvPayload) return;
-  const iw = Number(lastCvPayload.image_width) || 0;
-  const ih = Number(lastCvPayload.image_height) || 0;
-  const raw = lastCvPayload.objects || lastCvPayload.detections;
+  if (!lastSsdetPayload) return;
+  const iw = Number(lastSsdetPayload.image_width) || 0;
+  const ih = Number(lastSsdetPayload.image_height) || 0;
+  const raw = lastSsdetPayload.objects || lastSsdetPayload.detections;
   const items = Array.isArray(raw) ? raw : [];
   if (iw <= 0 || ih <= 0 || items.length === 0) return;
 
@@ -453,9 +453,9 @@ if (streamFrame && typeof ResizeObserver !== "undefined") {
 
 async function refreshStats() {
   try {
-    const [statsRes, cvRes] = await Promise.all([
+    const [statsRes, ssdetRes] = await Promise.all([
       fetch("/stats", { cache: "no-store" }),
-      fetch("/cv_result.json", { cache: "no-store" }),
+      fetch("/ssdet_result.json", { cache: "no-store" }),
     ]);
     if (!statsRes.ok) {
       throw new Error(`HTTP ${statsRes.status}`);
@@ -464,14 +464,14 @@ async function refreshStats() {
     statInferMs.textContent = Number.isFinite(stats.infer_ms) ? `${stats.infer_ms} ms` : "-";
     statFps.textContent = Number.isFinite(stats.infer_fps) ? stats.infer_fps : "-";
     setCameraStatus("运行中", "ok");
-    if (cvRes.ok) {
-      lastCvPayload = await cvRes.json();
+    if (ssdetRes.ok) {
+      lastSsdetPayload = await ssdetRes.json();
     } else {
-      lastCvPayload = null;
+      lastSsdetPayload = null;
     }
     drawDetectionOverlay();
   } catch (error) {
-    lastCvPayload = null;
+    lastSsdetPayload = null;
     drawDetectionOverlay();
     setCameraStatus("未就绪", "error");
   }
@@ -644,7 +644,7 @@ askForm.addEventListener("submit", async (event) => {
       body: JSON.stringify({
         question,
         stream: true,
-        cv_model: activeCvModel,
+        ssdet_model: activeSsdetModel,
       }),
       signal: controller.signal,
     });
@@ -696,8 +696,8 @@ askForm.addEventListener("submit", async (event) => {
 
 renderHistory();
 renderConversation();
-renderCvModel();
-syncCvModel(activeCvModel).catch(() => setCameraStatus("切换失败", "error"));
+renderSsdetModel();
+syncSsdetModel(activeSsdetModel).catch(() => setCameraStatus("切换失败", "error"));
 autoResizeTextarea();
 refreshStats();
 setInterval(refreshStats, 2000);

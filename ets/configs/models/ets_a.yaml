@@ -1,6 +1,5 @@
 model:
   name: ets_a
-  individual: false
   num_channels:
   - 16
   - 16
@@ -15,4 +14,4 @@ train:
   early_stopping:
     enabled: false
   visualization:
-    enabled: false
+    enabled: true

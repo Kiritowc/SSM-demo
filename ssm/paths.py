@@ -16,29 +16,29 @@ def repo_root() -> Path:
 @dataclass(frozen=True)
 class SsmPaths:
     root: Path
-    cv: Path
+    ssdet: Path
     ets: Path
     vlm: Path
     apps: Path
     apps_web: Path
     apps_video: Path
-    configs_cv: Path
+    configs_ssdet: Path
     configs_ets: Path
     configs_vlm: Path
     configs_platform: Path
-    artifacts_cv: Path
+    artifacts_ssdet: Path
     artifacts_ets: Path
     artifacts_vlm: Path
-    data_cv: Path
+    data_ssdet: Path
     data_ets: Path
 
     def ensure_runtime_dirs(self) -> None:
         for p in (
-            self.artifacts_cv / "runs",
-            self.artifacts_cv / "runtime",
-            self.artifacts_cv / "engines",
-            self.artifacts_cv / "backbones",
-            self.artifacts_cv / "logs",
+            self.artifacts_ssdet / "runs",
+            self.artifacts_ssdet / "runtime",
+            self.artifacts_ssdet / "engines",
+            self.artifacts_ssdet / "backbones",
+            self.artifacts_ssdet / "logs",
             self.artifacts_ets / "runs",
             self.artifacts_ets / "exports",
             self.artifacts_vlm / "models",
@@ -49,25 +49,25 @@ class SsmPaths:
 @lru_cache
 def get_paths() -> SsmPaths:
     root = repo_root()
-    cv = root / "cv"
+    ssdet_dir = root / "ssdet"
     ets = root / "ets"
     vlm = root / "vlm"
     apps = root / "apps"
     return SsmPaths(
         root=root,
-        cv=cv,
+        ssdet=ssdet_dir,
         ets=ets,
         vlm=vlm,
         apps=apps,
         apps_web=apps / "web",
         apps_video=apps / "video",
-        configs_cv=cv / "configs",
+        configs_ssdet=ssdet_dir / "configs",
         configs_ets=ets / "configs",
         configs_vlm=vlm / "configs",
         configs_platform=root / "configs",
-        artifacts_cv=cv / "artifacts",
+        artifacts_ssdet=ssdet_dir / "artifacts",
         artifacts_ets=ets / "artifacts",
         artifacts_vlm=vlm / "artifacts",
-        data_cv=cv / "data",
+        data_ssdet=ssdet_dir / "data",
         data_ets=ets / "datasets",
     )

@@ -12,9 +12,10 @@ if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 os.environ.setdefault("SSM_ROOT", str(_REPO))
 
-from ssm.bootstrap import bootstrap_repo
+from ssm.bootstrap import bootstrap_repo, ensure_runtime_python
 
 REPO_ROOT = bootstrap_repo(_REPO)
+ensure_runtime_python()
 
 from ets.export.onnx import export_onnx
 from ets.utils.checkpoint import resolve_checkpoint

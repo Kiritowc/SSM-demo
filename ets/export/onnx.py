@@ -57,6 +57,7 @@ def export_onnx(
 
     model = build_model(resolved_cfg, num_features)
     load_checkpoint(checkpoint_path, model, device=dev)
+    model.to(dev)
     model.eval()
 
     dummy_input = torch.randn(1, window_size, num_features, device=dev)

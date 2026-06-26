@@ -32,7 +32,7 @@ from ssm.paths import get_paths
 
 UI_ROOT = str(get_paths().apps_web)
 
-from cv.paths import ROBOT_TOY_CLASSES, ROBOT_TOY_ENGINE
+from ssdet.paths import ROBOT_TOY_CLASSES, ROBOT_TOY_ENGINE
 from ssm.config import platform_services
 from vlm.prompts import (
     _assistant_content_message,
@@ -78,7 +78,7 @@ class LatestJPEG:
         self._seq = 0
         self._jpeg = None
         self._stats: Dict[str, Any] = {}
-        self._cv_payload: Dict[str, Any] = {}
+        self._ssdet_payload: Dict[str, Any] = {}
         self._running = True
 
     def stop(self) -> None:
@@ -90,22 +90,22 @@ class LatestJPEG:
         self,
         jpeg: bytes,
         stats: Dict[str, Any],
-        cv_payload: Dict[str, Any],
+        ssdet_payload: Dict[str, Any],
     ) -> None:
         with self._cond:
             self._seq += 1
             self._jpeg = jpeg
             self._stats = dict(stats)
-            self._cv_payload = dict(cv_payload)
+            self._ssdet_payload = dict(ssdet_payload)
             self._cond.notify_all()
 
     def stats(self) -> Dict[str, Any]:
         with self._cond:
             return dict(self._stats)
 
-    def cv_payload(self) -> Dict[str, Any]:
+    def ssdet_payload(self) -> Dict[str, Any]:
         with self._cond:
-            return dict(self._cv_payload)
+            return dict(self._ssdet_payload)
 
     def latest_jpeg(self) -> Optional[bytes]:
         with self._cond:
@@ -131,7 +131,11 @@ class CameraReader(threading.Thread):
     def run(self) -> None:
         cap = cv2.VideoCapture(self.args.device, cv2.CAP_V4L2)
         if not cap.isOpened():
-            raise RuntimeError("Cannot open camera: %s" % self.args.device)
+            raise RuntimeError(
+                "Cannot open camera: %s (check device exists, not in use, "
+                "and user is in group 'video': sudo usermod -aG video $USER)"
+                % self.args.device
+            )
 
         cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.args.width)
@@ -195,7 +199,7 @@ def resdata_to_objects(res_data: dict):
     return objects
 
 
-def build_cv_payload(frame, res_data: dict, device: str):
+def build_ssdet_payload(frame, res_data: dict, device: str):
     h, w = frame.shape[:2]
     return {
         "objects": resdata_to_objects(res_data),
@@ -204,10 +208,10 @@ def build_cv_payload(frame, res_data: dict, device: str):
     }
 
 
-class CvModelState:
+class SsdetModelState:
     def __init__(self, args: argparse.Namespace) -> None:
         self._lock = threading.Lock()
-        self._current = args.default_cv_model
+        self._current = args.default_ssdet_model
         self._specs = {
             "none": {"label": "默认", "engine": "", "names": ""},
             "ssg_a_robot_toy": {
@@ -225,7 +229,7 @@ class CvModelState:
 
     def set(self, name: str) -> None:
         if name not in self._specs:
-            raise ValueError("Unknown CV model: %s" % name)
+            raise ValueError("Unknown SSDet model: %s" % name)
         with self._lock:
             self._current = name
 
@@ -391,19 +395,19 @@ class InferenceWorker(threading.Thread):
         args: argparse.Namespace,
         frames: LatestFrame,
         output: LatestJPEG,
-        cv_state: CvModelState,
+        ssdet_state: SsdetModelState,
     ) -> None:
         super().__init__(daemon=True)
         self.args = args
         self.frames = frames
         self.output = output
-        self.cv_state = cv_state
+        self.ssdet_state = ssdet_state
         self.running = True
 
     def run(self) -> None:
         os.chdir(REPO_ROOT)
         model = None
-        loaded_cv = None
+        loaded_ssdet = None
 
         seen_seq = 0
         processed = 0
@@ -417,22 +421,22 @@ class InferenceWorker(threading.Thread):
                 continue
 
             infer_start = time.monotonic()
-            current_cv = self.cv_state.get()
-            if current_cv == "none":
+            current_ssdet = self.ssdet_state.get()
+            if current_ssdet == "none":
                 res_data = {}
                 annotated = frame.copy()
                 infer_ms = 0.0
                 if model is not None:
                     model.close()
                     model = None
-                    loaded_cv = None
+                    loaded_ssdet = None
             else:
-                if model is None or loaded_cv != current_cv:
+                if model is None or loaded_ssdet != current_ssdet:
                     if model is not None:
                         model.close()
-                    spec = self.cv_state.spec(current_cv)
+                    spec = self.ssdet_state.spec(current_ssdet)
                     model = create_runner(self.args, spec)
-                    loaded_cv = current_cv
+                    loaded_ssdet = current_ssdet
                 frame_annotated = frame.copy()
                 res_data, annotated = model.detect(frame_annotated)
                 infer_ms = (time.monotonic() - infer_start) * 1000.0
@@ -447,19 +451,19 @@ class InferenceWorker(threading.Thread):
 
             stats = {
                 "backend": model.backend if model is not None else "none",
-                "cv_model": current_cv,
+                "ssdet_model": current_ssdet,
                 "detections": sum(len(v) for v in res_data.values()),
                 "infer_ms": round(infer_ms, 1),
                 "infer_fps": round(infer_fps, 2),
                 "width": int(frame.shape[1]),
                 "height": int(frame.shape[0]),
             }
-            cv_payload = build_cv_payload(annotated, res_data, self.args.device)
+            ssdet_payload = build_ssdet_payload(annotated, res_data, self.args.device)
             ok, encoded = cv2.imencode(
                 ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), self.args.jpeg_quality]
             )
             if ok:
-                self.output.update(encoded.tobytes(), stats, cv_payload)
+                self.output.update(encoded.tobytes(), stats, ssdet_payload)
 
         if model is not None:
             model.close()
@@ -681,7 +685,7 @@ def build_vlm_request(
 def make_handler(
     args: argparse.Namespace,
     output: LatestJPEG,
-    cv_state: CvModelState,
+    ssdet_state: SsdetModelState,
     boundary: bytes,
 ):
     class Handler(BaseHTTPRequestHandler):
@@ -747,16 +751,16 @@ def make_handler(
 
             if route == "/stats":
                 stats = output.stats()
-                stats.setdefault("cv_model", cv_state.get())
+                stats.setdefault("ssdet_model", ssdet_state.get())
                 self.send_json(stats)
                 return
 
-            if route == "/cv_model":
-                self.send_json(cv_state.snapshot())
+            if route == "/ssdet_model":
+                self.send_json(ssdet_state.snapshot())
                 return
 
-            if route == "/cv_result.json":
-                self.send_json(output.cv_payload())
+            if route == "/ssdet_result.json":
+                self.send_json(output.ssdet_payload())
                 return
 
             if route == "/snapshot.jpg":
@@ -804,7 +808,7 @@ def make_handler(
 
         def do_POST(self) -> None:
             route = self.path.split("?", 1)[0]
-            if route not in ("/ask", "/cv_model"):
+            if route not in ("/ask", "/ssdet_model"):
                 self.send_error(404)
                 return
 
@@ -823,14 +827,14 @@ def make_handler(
                 self.send_json({"error": "Request body must be JSON"}, status=400)
                 return
 
-            if route == "/cv_model":
+            if route == "/ssdet_model":
                 model_name = str(body.get("model", "")).strip() if isinstance(body, dict) else ""
                 try:
-                    cv_state.set(model_name)
+                    ssdet_state.set(model_name)
                 except ValueError as exc:
                     self.send_json({"error": str(exc)}, status=400)
                     return
-                self.send_json(cv_state.snapshot())
+                self.send_json(ssdet_state.snapshot())
                 return
 
             question = str(body.get("question", "")).strip() if isinstance(body, dict) else ""
@@ -838,11 +842,11 @@ def make_handler(
                 self.send_json({"error": "Question is required"}, status=400)
                 return
             stream = bool(body.get("stream")) if isinstance(body, dict) else False
-            no_cv = bool(body.get("no_cv")) if isinstance(body, dict) else False
-            requested_cv_model = str(body.get("cv_model", "")).strip() if isinstance(body, dict) else ""
-            if requested_cv_model:
+            no_ssdet = bool(body.get("no_ssdet")) if isinstance(body, dict) else False
+            requested_ssdet_model = str(body.get("ssdet_model", "")).strip() if isinstance(body, dict) else ""
+            if requested_ssdet_model:
                 try:
-                    cv_state.set(requested_cv_model)
+                    ssdet_state.set(requested_ssdet_model)
                 except ValueError as exc:
                     self.send_json({"error": str(exc)}, status=400)
                     return
@@ -855,8 +859,8 @@ def make_handler(
                 self.send_json({"error": "No camera frame is ready yet"}, status=503)
                 return
 
-            cv_payload = output.cv_payload()
-            active_mode = cv_state.get()
+            ssdet_payload = output.ssdet_payload()
+            active_mode = ssdet_state.get()
             robot_toy_mode = active_mode == VISION_MODE_ROBOT_TOY
             req_body = build_vlm_request(
                 args,
@@ -881,7 +885,7 @@ def make_handler(
                     if not answer:
                         self.send_sse({"error": "VLM response did not include an answer"}, event="error")
                         return
-                    self.send_sse({"done": True, "cv_result": cv_payload, "stats": output.stats()}, event="done")
+                    self.send_sse({"done": True, "ssdet_result": ssdet_payload, "stats": output.stats()}, event="done")
                 except RuntimeError as exc:
                     if str(exc) == "CANCELLED" or not ASK_STATE.is_current(my_id):
                         return
@@ -911,7 +915,7 @@ def make_handler(
                 self.send_json({"error": "VLM response did not include an answer"}, status=502)
                 return
 
-            self.send_json({"answer": answer, "cv_result": cv_payload, "stats": output.stats()})
+            self.send_json({"answer": answer, "ssdet_result": ssdet_payload, "stats": output.stats()})
 
     return Handler
 
@@ -935,7 +939,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--conf", type=float, default=0.5)
     ap.add_argument("--nms", type=float, default=0.5)
     ap.add_argument(
-        "--default-cv-model",
+        "--default-ssdet-model",
         choices=("none", "ssg_a_robot_toy"),
         default="none",
     )
@@ -973,25 +977,19 @@ def main() -> None:
     args = parse_args()
     frames = LatestFrame()
     output = LatestJPEG()
-    cv_state = CvModelState(args)
+    ssdet_state = SsdetModelState(args)
     camera = CameraReader(args, frames)
-    infer = InferenceWorker(args, frames, output, cv_state)
+    infer = InferenceWorker(args, frames, output, ssdet_state)
 
     camera.start()
     infer.start()
 
-    server = MJPEGServer((args.host, args.port), make_handler(args, output, cv_state, b"ssg_a_boundary"))
+    server = MJPEGServer((args.host, args.port), make_handler(args, output, ssdet_state, b"ssg_a_boundary"))
     print(
         "ssg_a camera server http://%s:%d/  device=%s %dx%d@%d output_fps=%.1f"
         % (args.host, args.port, args.device, args.width, args.height, args.fps, args.output_fps),
         flush=True,
     )
-    print(
-        "Windows: ssh -N -L 18080:127.0.0.1:%d user@<ORIN_IP>" % args.port,
-        flush=True,
-    )
-    print("Browser: http://127.0.0.1:18080/", flush=True)
-
     try:
         server.serve_forever()
     except KeyboardInterrupt:

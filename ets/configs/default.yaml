@@ -8,7 +8,7 @@ task:
 model: {}
 
 data:
-  profile: air_quality
+  profile: ssa_hourly
   stride: 1
   input_mode: features_only
   target_channel: -1
